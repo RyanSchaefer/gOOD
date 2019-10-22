@@ -11,7 +11,7 @@ public interface IWorksheet {
    * @param row the row of the cell, 0 indexed
    * @return the cell or null
    */
-  ICell getCellAt(int col, int row);
+  Sexp getCellAt(int col, int row);
 
   /**
    * Changes the cell at the given coordinates to contain the given sexp
@@ -21,6 +21,5 @@ public interface IWorksheet {
    * @throws IllegalArgumentException Sexp is null
    */
   void changeCellAt(int col, int row, Sexp sexp) throws IllegalArgumentException;
-
 
 }

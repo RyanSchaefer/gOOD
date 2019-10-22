@@ -8,7 +8,7 @@ import java.util.Objects;
 public class SBoolean implements Sexp {
   boolean val;
 
-  SBoolean(boolean val) {
+  public SBoolean(boolean val) {
     this.val = val;
   }
 

@@ -3,6 +3,12 @@ package edu.cs3500.spreadsheets.model;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 
+import java.util.List;
+
+import edu.cs3500.spreadsheets.model.Coord;
+import edu.cs3500.spreadsheets.model.IWorksheet;
+import edu.cs3500.spreadsheets.sexp.SexpVisitor;
+
 public class BasicWorksheet implements IWorksheet {
 
   private BasicWorksheet() {
@@ -34,18 +40,13 @@ public class BasicWorksheet implements IWorksheet {
     return null;
   }
 
-  @Override
-  public String getSheetName() {
-    return null;
-  }
 
   @Override
   public void changeCellAt(int col, int row, Sexp sexp) {
 
   }
 
-  @Override
-  public void changeSheetName(String name) {
-
-  }
 }
+
+
+

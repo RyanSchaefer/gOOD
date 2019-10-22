@@ -1,0 +1,11 @@
+A1 "hello"
+A2 true
+A3 2.2
+A4 A1:A3
+
+B1 1
+B2 2
+B3 3
+
+B4 (SUM B1:B3)
+
