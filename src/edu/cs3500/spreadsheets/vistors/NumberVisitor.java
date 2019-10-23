@@ -43,11 +43,12 @@ public class NumberVisitor implements SexpVisitor<Double> {
 
   @Override
   public Double visitSymbol(String s) {
-    if (s.matches("^[A-Z]*[0-9]*$")) {
+    if (s.matches("^([A-Z]+)([0-9]+)$")) {
 
-      Pattern r = Pattern.compile("^(A-Z]*)([0-9]*)$");
+      Pattern r = Pattern.compile("^([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
-      Sexp ex = model.getCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)));
+      m.find();
+      Sexp ex = model.getCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)));
 
       if (ex == null) {
         return base;

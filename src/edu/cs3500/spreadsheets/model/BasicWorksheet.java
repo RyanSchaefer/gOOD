@@ -3,7 +3,9 @@ package edu.cs3500.spreadsheets.model;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
@@ -11,7 +13,10 @@ import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
 public class BasicWorksheet implements IWorksheet {
 
+  Map<Coord, Sexp> grid;
+
   private BasicWorksheet() {
+    grid = new HashMap<>();
   }
 
   public static class BasicWorksheetBuilder
@@ -37,13 +42,13 @@ public class BasicWorksheet implements IWorksheet {
 
   @Override
   public Sexp getCellAt(int col, int row) {
-    return null;
+    return grid.get(new Coord(col, row));
   }
 
 
   @Override
   public void changeCellAt(int col, int row, Sexp sexp) {
-
+    grid.put(new Coord(col, row), sexp);
   }
 
 }
