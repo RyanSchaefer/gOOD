@@ -71,9 +71,9 @@ abstract public class TestModel {
   @Test
   public void changeCellValue() {
     IWorksheet sheet = model("test1.gOOD");
-    assertEquals(new SNumber(3), sheet.getCellAt(0, 0));
-    sheet.changeCellAt(0, 0, new SNumber(5));
-    assertEquals(new SNumber(5), sheet.getCellAt(0, 0));
+    assertEquals(new SNumber(3), sheet.getCellAt(1, 1));
+    sheet.changeCellAt(1, 1, new SNumber(5));
+    assertEquals(new SNumber(5), sheet.getCellAt(1, 1));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -113,7 +113,7 @@ abstract public class TestModel {
   @Test
   public void EvalCell2() {
     IWorksheet sheet = model("test3.gOOD");
-    assertEquals(new SString("hello"),  sheet.getCellAt(1, 1).accept(
+    assertEquals(new SString("hello"), sheet.getCellAt(1, 1).accept(
             new EvalVisitor(sheet)));
     assertEquals(new SBoolean(true), sheet.getCellAt(1, 2).accept(
             new EvalVisitor(sheet)));
