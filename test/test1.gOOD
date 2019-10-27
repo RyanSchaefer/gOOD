@@ -5,8 +5,8 @@ C1 9
 D1 12
 
 # Computes delta-x^2
-A2 (PRODUCT (SUM C1 A1) (SUM C1 A1))
+A2 =(PRODUCT (SUM C1 A1) (SUM C1 A1))
 # Computes delta-y^2
-B2 (PRODUCT (SUM D1 B1) (SUM D1 B1))
+B2 =(PRODUCT (SUM D1 B1) (SUM D1 B1))
 
-B3 (< A3 10)
+B3 =(< A3 10)

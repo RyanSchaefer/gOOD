@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
+import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.SString;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
@@ -35,11 +36,13 @@ public class StringVisitor implements SexpVisitor<Sexp> {
 
   @Override
   public Sexp visitSymbol(String s) {
-    if (s.matches("^[A-Z]*[0-9]*$")) {
+    if (s.matches("^[A-Z]+[0-9]+$")) {
 
-      Pattern r = Pattern.compile("^(A-Z]*)([0-9]*)$");
+      Pattern r = Pattern.compile("^(A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
-      Sexp ex = model.getCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)));
+      Sexp ex = Parser.parse(
+              model.getCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)))
+      );
 
       if (ex == null) {
         throw new IllegalArgumentException();

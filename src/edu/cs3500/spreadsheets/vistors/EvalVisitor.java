@@ -2,7 +2,8 @@ package edu.cs3500.spreadsheets.vistors;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Coord;
+import edu.cs3500.spreadsheets.functions.MultFunction;
+import edu.cs3500.spreadsheets.functions.SumFunction;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.SBoolean;
 import edu.cs3500.spreadsheets.sexp.SNumber;
@@ -30,22 +31,20 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
   }
 
   @Override
-  public Sexp visitSList(List<Sexp> l) {
+  public Sexp visitSList(List<Sexp> l) throws IllegalArgumentException {
     switch (l.get(0).toString().toLowerCase()) {
       case "product":
         return productHelp(l.subList(1, l.size()));
       case "sum":
         return sumHelp(l.subList(1, l.size()));
       case "<":
-        l.remove(0);
-        if (l.size() == 2) {
-         return lessThanHelp(l.get(0), l.get(1));
+        if (l.size() == 3) {
+         return lessThanHelp(l.get(1), l.get(2));
         }
         throw new IllegalArgumentException();
       case "lowercase":
-        l.remove(0);
-        if (l.size() == 1) {
-          return lowercaseHelp(l.get(0));
+        if (l.size() == 2) {
+          return lowercaseHelp(l.get(1));
         }
         throw new IllegalArgumentException();
       default:
@@ -66,7 +65,7 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
   private Sexp productHelp(List<Sexp> s) {
     double product = 1;
     for (Sexp x: s) {
-      product *= x.accept(new NumberVisitor(1, this.model));
+      product *= x.accept(new NumberVisitor(1, this.model, new MultFunction()));
     }
     return new SNumber(product);
   }
@@ -74,15 +73,15 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
   private Sexp sumHelp(List<Sexp> s) {
     double sum = 0;
     for (Sexp x: s) {
-      sum += x.accept(new NumberVisitor(0, this.model));
+      sum += x.accept(new NumberVisitor(0, this.model, new SumFunction()));
     }
     return new SNumber(sum);
   }
 
   private Sexp lessThanHelp(Sexp s1, Sexp s2) {
     return new SBoolean(
-            s1.accept(new BooleanVisitor(this.model)) <
-            s2.accept(new BooleanVisitor(this.model)));
+            s1.accept(new StrictNumberVisitor(this.model)) <
+            s2.accept(new StrictNumberVisitor(this.model)));
   }
 
   private Sexp lowercaseHelp(Sexp s) {
