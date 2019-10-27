@@ -38,7 +38,7 @@ public class BeyondGood {
                 new FileReader(args[1]));
 
         if (model.documentFreeOfErrors()) {
-          System.out.print(model.evaluateCellAt(cell.col, cell.col));
+          System.out.print(model.evaluateCellAt(cell.col, cell.row));
         } else {
           for (Coord c : model.allActiveCells()) {
             try {

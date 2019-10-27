@@ -3,10 +3,13 @@ A1 3
 B1 4
 C1 9
 D1 12
+E1 10
+E2 10
+
+
+B3 =(< A3 10)
 
 # Computes delta-x^2
 A2 =(PRODUCT (SUM C1 A1) (SUM C1 A1))
 # Computes delta-y^2
 B2 =(PRODUCT (SUM D1 B1) (SUM D1 B1))
-
-B3 =(< A1 10)

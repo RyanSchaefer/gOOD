@@ -49,7 +49,8 @@ public class StrictNumberVisitor implements SexpVisitor<Double> {
       Pattern r = Pattern.compile("^([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
       m.find();
-      String cell = model.getCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)));
+      String cell =
+              model.evaluateCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)));
 
       if (cell == null) {
         throw new IllegalArgumentException();

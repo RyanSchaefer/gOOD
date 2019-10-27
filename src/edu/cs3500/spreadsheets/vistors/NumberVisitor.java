@@ -15,15 +15,15 @@ import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
 
 /**
- * Converts any Sexp into a number given a function to combine the numbers and a base
- * to return if the expression should be ignored.
+ * Converts any Sexp into a number given a function to combine the numbers and a base to return if
+ * the expression should be ignored.
  */
 public class NumberVisitor implements SexpVisitor<Double> {
   private double base;
   private IWorksheet model;
   private BiFunction<Double, Double, Double> function;
 
-  public NumberVisitor(double base, IWorksheet model, BiFunction<Double, Double, Double> function) {
+  NumberVisitor(double base, IWorksheet model, BiFunction<Double, Double, Double> function) {
     this.base = base;
     this.model = model;
     this.function = function;
@@ -42,9 +42,9 @@ public class NumberVisitor implements SexpVisitor<Double> {
   @Override
   public Double visitSList(List<Sexp> l) {
     try {
-       return new SList(l).accept(
-               new EvalVisitor(this.model)).accept(
-                       new NumberVisitor(base, this.model, this.function));
+      return new SList(l).accept(
+              new EvalVisitor(this.model)).accept(
+              new NumberVisitor(base, this.model, this.function));
     } catch (IllegalArgumentException e) {
       return base;
     }
@@ -58,7 +58,7 @@ public class NumberVisitor implements SexpVisitor<Double> {
       Matcher m = r.matcher(s);
       m.find();
       Sexp ex = Parser.parse(
-              model.getCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)))
+              model.evaluateCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)))
       );
 
       if (ex == null) {
@@ -74,10 +74,15 @@ public class NumberVisitor implements SexpVisitor<Double> {
 
       double sofar = base;
 
-      for (int col = Coord.colNameToIndex(m.group(1)); col < Coord.colNameToIndex(m.group(3));
+      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) &&
+              Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
+        return base;
+      }
+
+      for (int col = Coord.colNameToIndex(m.group(1)); col <= Coord.colNameToIndex(m.group(3));
            col++) {
-        for (int row = Integer.parseInt(m.group(2)); row < Integer.parseInt(m.group(4)); row++) {
-          Sexp cell = Parser.parse(model.getCellAt(col, row));
+        for (int row = Integer.parseInt(m.group(2)); row <= Integer.parseInt(m.group(4)); row++) {
+          Sexp cell = Parser.parse(model.evaluateCellAt(col, row));
           if (cell == null) {
             continue;
           }

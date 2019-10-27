@@ -44,7 +44,7 @@ public class StringVisitor implements SexpVisitor<Sexp> {
       Pattern r = Pattern.compile("^(A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
       Sexp ex = Parser.parse(
-              model.getCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)))
+              model.evaluateCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)))
       );
 
       if (ex == null) {
