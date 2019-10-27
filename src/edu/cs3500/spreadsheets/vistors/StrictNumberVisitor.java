@@ -1,11 +1,10 @@
 package edu.cs3500.spreadsheets.vistors;
 
 import java.util.List;
-import java.util.function.BiFunction;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.cs3500.spreadsheets.functions.SumFunction;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.Parser;
@@ -13,6 +12,10 @@ import edu.cs3500.spreadsheets.sexp.SList;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+
+/**
+ * Strictly visits only numbers otherwise throws an error.
+ */
 public class StrictNumberVisitor implements SexpVisitor<Double> {
 
   private IWorksheet model;

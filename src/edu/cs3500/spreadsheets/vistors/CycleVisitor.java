@@ -1,7 +1,6 @@
 package edu.cs3500.spreadsheets.vistors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +12,7 @@ import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
 /**
- * Answers if there is a cycle in this Sexp
+ * Answers if there is a cycle in this Sexp in the context of the provided model.
  */
 public class CycleVisitor implements SexpVisitor<Boolean> {
 

@@ -75,22 +75,22 @@ abstract public class TestModel {
     IWorksheet sheet = model("test1.gOOD");
     sheet.changeCellAt(1, 1, "A1");
     sheet.changeCellAt(0, 0, "B2");
-    sheet.evaulateCellAt(1, 1);
+    sheet.evaluateCellAt(1, 1);
   }
 
   @Test
   public void EvalCell() {
     IWorksheet sheet = model("test1.gOOD");
     assertNull(sheet.getCellAt(123, 123));
-    assertEquals(String.format("%f", 3.0),  sheet.evaulateCellAt(1, 1));
-    assertEquals(String.format("%f", 144.0), sheet.evaulateCellAt(1, 2));
+    assertEquals(String.format("%f", 3.0),  sheet.evaluateCellAt(1, 1));
+    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1, 2));
   }
 
   @Test
   public void EvalCell2() {
     IWorksheet sheet = model("test3.gOOD");
-    assertEquals("\"hello\"",  sheet.evaulateCellAt(1, 1));
-    assertEquals("true", sheet.evaulateCellAt(1, 2));
+    assertEquals("\"hello\"",  sheet.evaluateCellAt(1, 1));
+    assertEquals("true", sheet.evaluateCellAt(1, 2));
   }
 
   @Test(expected = IllegalArgumentException.class)

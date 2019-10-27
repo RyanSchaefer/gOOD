@@ -12,6 +12,12 @@ import edu.cs3500.spreadsheets.sexp.SSymbol;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Evaluate the given Sexp in the context of the provided model.
+ * The Sexp returned with be a "base" level Sexp that does not have symbols,
+ * or lists.
+ * The Sexp must be checked for cycles with {@link CycleVisitor} before hand.
+ */
 public class EvalVisitor implements SexpVisitor<Sexp> {
 
   private IWorksheet model;

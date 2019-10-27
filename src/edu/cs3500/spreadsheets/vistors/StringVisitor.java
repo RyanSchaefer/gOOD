@@ -11,6 +11,9 @@ import edu.cs3500.spreadsheets.sexp.SString;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Strictly visits strings otherwise turns a string into lower case.
+ */
 public class StringVisitor implements SexpVisitor<Sexp> {
 
   IWorksheet model;

@@ -1,12 +1,21 @@
 package edu.cs3500.spreadsheets.model;
 
 import java.util.List;
+import java.util.Map;
+
+import edu.cs3500.spreadsheets.sexp.Sexp;
 
 /**
  * A worksheet of expressions. Everything in the worksheet environment is a expression that
  * can be visited an manipulated.
  */
 public interface IWorksheet {
+
+  /**
+   * Provides a copy of all of the active cells for iteration purposes.
+   * @return the cells with Sexps in them.
+   */
+  List<Coord> allActiveCells();
 
   /**
    * Returns the literal representation of the cell at the given coordinates
@@ -33,7 +42,7 @@ public interface IWorksheet {
    * @return the evaluated contents as a string or null
    * @throws IllegalArgumentException there is an error preventing the cell from being evaluated
    */
-  String evaulateCellAt(int col, int row);
+  String evaluateCellAt(int col, int row);
 
   /**
    * Changes the cell at the given coordinates to contain the given sexp.

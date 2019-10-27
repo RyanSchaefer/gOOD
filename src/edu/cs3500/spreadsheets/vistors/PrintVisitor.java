@@ -6,6 +6,10 @@ import edu.cs3500.spreadsheets.sexp.SString;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Prints out the expression with doubles being formatted to %f and strings
+ * having escaped " and \.
+ */
 public class PrintVisitor implements SexpVisitor<String> {
   @Override
   public String visitBoolean(boolean b) {

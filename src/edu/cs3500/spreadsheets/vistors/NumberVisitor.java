@@ -10,10 +10,14 @@ import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.SList;
-import edu.cs3500.spreadsheets.sexp.SSymbol;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+
+/**
+ * Converts any Sexp into a number given a function to combine the numbers and a base
+ * to return if the expression should be ignored.
+ */
 public class NumberVisitor implements SexpVisitor<Double> {
   private double base;
   private IWorksheet model;

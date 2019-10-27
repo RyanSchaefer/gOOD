@@ -10,6 +10,9 @@ import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Gets the dependencies of this Sexp in the context of the provided model.
+ */
 public class DependencyVisitor implements SexpVisitor<List<Coord>> {
 
   IWorksheet model;

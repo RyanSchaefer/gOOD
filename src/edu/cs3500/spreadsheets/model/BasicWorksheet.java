@@ -29,11 +29,17 @@ public class BasicWorksheet implements IWorksheet {
   private BasicWorksheet() {
   }
 
+  /**
+   * Builds a basic worksheet one cell at a time.
+   */
   public static class BasicWorksheetBuilder
           implements WorksheetReader.WorksheetBuilder<BasicWorksheet> {
 
     private BasicWorksheet model;
 
+    /**
+     * Return a basic worksheet builder to build with.
+     */
     public BasicWorksheetBuilder () {
       model = new BasicWorksheet();
     }
@@ -67,7 +73,7 @@ public class BasicWorksheet implements IWorksheet {
 
 
   @Override
-  public String evaulateCellAt(int col, int row) throws IllegalArgumentException {
+  public String evaluateCellAt(int col, int row) throws IllegalArgumentException {
     Coord coord = new Coord(col, row);
     Sexp cell = grid.get(new Coord(col, row));
     if (cell == null) {
@@ -135,6 +141,11 @@ public class BasicWorksheet implements IWorksheet {
       }
     }
     return true;
+  }
+
+  @Override
+  public List<Coord> allActiveCells() {
+    return new ArrayList<>(this.grid.keySet());
   }
 }
 
