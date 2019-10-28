@@ -67,14 +67,8 @@ abstract public class TestModel {
 
   @Test
   public void circularReferenceCausesErrorWithSheet() {
-    IWorksheet sheet = model("test2.gOOD");
+    IWorksheet sheet = model("test4.gOOD");
     assertFalse(sheet.documentFreeOfErrors());
-  }
-
-  @Test
-  public void getDependents() {
-    IWorksheet worksheet = model("test2.gOOD");
-    System.out.print(worksheet.getDependents(1, 3));
   }
 
   @Test
@@ -112,6 +106,15 @@ abstract public class TestModel {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "(< 2.2 \"test\")");
     sheet.evaluateCellAt(1, 1);
+  }
+
+  @Test
+  public void changingCellPropagatesChanges() {
+    IWorksheet sheet = model("test2.gOOD");
+    assertEquals(String.format("%f", 163840.0), sheet.evaluateCellAt(1, 18));
+    sheet.changeCellAt(1, 1, "3");
+    sheet.changeCellAt(1, 2, "5");
+    assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18));
   }
 
 

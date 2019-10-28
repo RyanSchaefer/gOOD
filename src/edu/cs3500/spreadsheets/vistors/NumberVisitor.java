@@ -1,6 +1,5 @@
 package edu.cs3500.spreadsheets.vistors;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -70,7 +69,6 @@ public class NumberVisitor implements SexpVisitor<Double> {
       Pattern r = Pattern.compile("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
       m.find();
-      ArrayList<Sexp> dependencies = new ArrayList<>();
 
       double sofar = base;
 
@@ -82,10 +80,11 @@ public class NumberVisitor implements SexpVisitor<Double> {
       for (int col = Coord.colNameToIndex(m.group(1)); col <= Coord.colNameToIndex(m.group(3));
            col++) {
         for (int row = Integer.parseInt(m.group(2)); row <= Integer.parseInt(m.group(4)); row++) {
-          Sexp cell = Parser.parse(model.evaluateCellAt(col, row));
-          if (cell == null) {
+          String scell = model.evaluateCellAt(col, row);
+          if (scell == null) {
             continue;
           }
+          Sexp cell = Parser.parse(scell);
           sofar = function.apply(sofar, cell.accept(this));
         }
       }

@@ -1,11 +1,9 @@
 package edu.cs3500.spreadsheets.vistors;
 
 import java.util.List;
-import java.util.Map;
 
 import edu.cs3500.spreadsheets.functions.MultFunction;
 import edu.cs3500.spreadsheets.functions.SumFunction;
-import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.SBoolean;
 import edu.cs3500.spreadsheets.sexp.SNumber;

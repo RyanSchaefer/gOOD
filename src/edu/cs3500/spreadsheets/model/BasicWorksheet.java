@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.cs3500.spreadsheets.vistors.CycleVisitor;
 import edu.cs3500.spreadsheets.vistors.DependencyVisitor;
 import edu.cs3500.spreadsheets.vistors.EvalVisitor;
 import edu.cs3500.spreadsheets.vistors.PrintVisitor;
@@ -27,6 +26,9 @@ public class BasicWorksheet implements IWorksheet {
 
   // a graph representing the a coordinate and which coordinates depend on that coordinate
   private Map<Coord, Set<Coord>> dependencies = new HashMap<>();
+
+  // builds a list of expressions that have evaluated, when a cell changes this is reset
+  private Map<Coord, String> evalMap = new HashMap<>();
 
   private BasicWorksheet() {
   }
@@ -86,12 +88,16 @@ public class BasicWorksheet implements IWorksheet {
     if (getDependents(col, row).contains(coord)) {
       throw new IllegalArgumentException("Cyclical reference");
     }
-    return grid.get(new Coord(col, row)).accept(new EvalVisitor(this)).accept(
-            new PrintVisitor());
+    if (!evalMap.containsKey(coord)) {
+      evalMap.put(coord, grid.get(coord).accept(new EvalVisitor(this)).accept(
+              new PrintVisitor()));
+    }
+    return evalMap.get(coord);
   }
 
   @Override
   public void changeCellAt(int col, int row, String s) {
+    evalMap = new HashMap<>();
     if (s == null) {
       throw new IllegalArgumentException();
     }
@@ -120,32 +126,9 @@ public class BasicWorksheet implements IWorksheet {
   @Override
   public Set<Coord> getDependents(int col, int row) {
     if (dependencies.containsKey(new Coord(col, row))) {
-      Set<Coord> dependents = dependencies.get(new Coord(col, row));
-      for (Coord c : dependents) {
-        dependentsHelper(c, dependents);
-      }
-      return dependents;
+      return dependencies.get(new Coord(col, row));
     }
     return new HashSet<>();
-  }
-
-  /**
-   * Given a coordinate add all of its dependents to the list of dependents we have seen thus far
-   * if it is not already in it.
-   * @param c the cell we are evaluating
-   * @param sofar the cells known to be dependents
-   */
-  private void dependentsHelper(Coord c, Set<Coord> sofar) {
-    if (!dependencies.containsKey(c)) {
-      return;
-    }
-    Set<Coord> dependents = dependencies.get(c);
-    for (Coord dep: dependents) {
-      if (!sofar.contains(dep)) {
-        sofar.add(dep);
-        dependentsHelper(dep, sofar);
-      }
-    }
   }
 
   @Override
@@ -153,7 +136,7 @@ public class BasicWorksheet implements IWorksheet {
     for (Coord c: grid.keySet()) {
       try {
         Sexp cell = grid.get(c);
-        if (cell.accept(new CycleVisitor(this, new ArrayList<>(Arrays.asList(c))))) {
+        if (getDependents(c.col, c.row).contains(c)) {
           return false;
         }
         cell.accept(new EvalVisitor(this));
