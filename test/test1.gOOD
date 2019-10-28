@@ -3,6 +3,7 @@ A1 3
 B1 4
 C1 9
 D1 12
+A3 2
 
 # Computes delta-x^2
 A2 =(PRODUCT (SUM C1 A1) (SUM C1 A1))
