@@ -6,10 +6,11 @@ import edu.cs3500.spreadsheets.sexp.Sexp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import edu.cs3500.spreadsheets.vistors.CycleVisitor;
 import edu.cs3500.spreadsheets.vistors.DependencyVisitor;
 import edu.cs3500.spreadsheets.vistors.EvalVisitor;
 import edu.cs3500.spreadsheets.vistors.PrintVisitor;
@@ -24,29 +25,40 @@ public class BasicWorksheet implements IWorksheet {
   private Map<Coord, Sexp> grid = new HashMap<>();
 
   // a graph representing the a coordinate and which coordinates depend on that coordinate
-  private Map<Coord, List<Coord>> dependencies = new HashMap<>();
+  private Map<Coord, Set<Coord>> dependencies = new HashMap<>();
+
+  // builds a list of expressions that have evaluated, when a cell changes this is reset
+  private Map<Coord, String> evalMap = new HashMap<>();
 
   private BasicWorksheet() {
   }
 
+  /**
+   * Builds a basic worksheet one cell at a time.
+   */
   public static class BasicWorksheetBuilder
           implements WorksheetReader.WorksheetBuilder<BasicWorksheet> {
 
     private BasicWorksheet model;
 
-    public BasicWorksheetBuilder () {
+    /**
+     * Return a basic worksheet builder to build with.
+     */
+    public BasicWorksheetBuilder() {
       model = new BasicWorksheet();
     }
 
     @Override
-    public WorksheetReader.WorksheetBuilder<BasicWorksheet> createCell(int col, int row, String contents) {
+    public WorksheetReader.WorksheetBuilder<BasicWorksheet> createCell(int col,
+                                                                       int row,
+                                                                       String contents) {
       if (contents == null) {
         throw new IllegalArgumentException();
       }
       if (contents.startsWith("=")) {
-        model.grid.put(new Coord(col, row), Parser.parse(contents.substring(1)));
+        model.changeCellAt(col, row, contents.substring(1));
       } else {
-        model.grid.put(new Coord(col, row), Parser.parse(contents));
+        model.changeCellAt(col, row, contents);
       }
       return this;
     }
@@ -67,66 +79,64 @@ public class BasicWorksheet implements IWorksheet {
 
 
   @Override
-  public String evaulateCellAt(int col, int row) throws IllegalArgumentException {
+  public String evaluateCellAt(int col, int row) throws IllegalArgumentException {
     Coord coord = new Coord(col, row);
     Sexp cell = grid.get(new Coord(col, row));
     if (cell == null) {
       return null;
     }
-    if (cell.accept(new CycleVisitor(this, new ArrayList<>(Arrays.asList(coord))))) {
+    if (getDependents(col, row).contains(coord)) {
       throw new IllegalArgumentException("Cyclical reference");
     }
-    return grid.get(new Coord(col, row)).accept(new EvalVisitor(this)).accept(
-            new PrintVisitor());
+    if (!evalMap.containsKey(coord)) {
+      evalMap.put(coord, grid.get(coord).accept(new EvalVisitor(this)).accept(
+              new PrintVisitor()));
+    }
+    return evalMap.get(coord);
   }
 
   @Override
   public void changeCellAt(int col, int row, String s) {
+    evalMap = new HashMap<>();
     if (s == null) {
       throw new IllegalArgumentException();
     }
     Sexp sexp = Parser.parse(s);
-    for (Coord c: sexp.accept(new DependencyVisitor(this))) {
-      if (dependencies.containsKey(c)) {
-        dependencies.get(c).add(c);
-      } else {
-        dependencies.put(c, new ArrayList<>(Arrays.asList(c)));
-      }
-    }
+    updateDependents(sexp, new Coord(col, row));
     grid.put(new Coord(col, row), sexp);
   }
 
-  @Override
-  public List<Coord> getDependents(int col, int row) {
-    List<Coord> dependents = new ArrayList<>(dependencies.get(new Coord(col, row)));
-    for (Coord c: dependents) {
-      dependentsHelper(c, dependents);
-    }
-    return dependents;
-  }
+  private void updateDependents(Sexp s, Coord cell) {
 
-  /**
-   * Given a coordinate add all of its dependents to the list of dependents we have seen thus far
-   * if it is not already in it
-   * @param c the cell we are evaluating
-   * @param sofar the cells known to be dependents
-   */
-  private void dependentsHelper(Coord c, List<Coord> sofar) {
-    List<Coord> dependents = dependencies.get(c);
-    for (Coord dep: dependents) {
-      if (!sofar.contains(dep)) {
-        sofar.add(dep);
-        dependentsHelper(dep, sofar);
+    // remove all references to this cell
+    for (Coord c: dependencies.keySet()) {
+      dependencies.get(c).remove(cell);
+    }
+
+    // update which cells depend this cell depends on
+    for (Coord c: s.accept(new DependencyVisitor())) {
+      if (dependencies.containsKey(c)) {
+        dependencies.get(c).add(cell);
+      } else {
+        dependencies.put(c, new HashSet<>(Arrays.asList(cell)));
       }
     }
+  }
+
+  @Override
+  public Set<Coord> getDependents(int col, int row) {
+    if (dependencies.containsKey(new Coord(col, row))) {
+      return dependencies.get(new Coord(col, row));
+    }
+    return new HashSet<>();
   }
 
   @Override
   public boolean documentFreeOfErrors() {
-    for (Coord c: grid.keySet()){
+    for (Coord c: grid.keySet()) {
       try {
         Sexp cell = grid.get(c);
-        if (cell.accept(new CycleVisitor(this, new ArrayList<>(Arrays.asList(c))))) {
+        if (getDependents(c.col, c.row).contains(c)) {
           return false;
         }
         cell.accept(new EvalVisitor(this));
@@ -135,6 +145,11 @@ public class BasicWorksheet implements IWorksheet {
       }
     }
     return true;
+  }
+
+  @Override
+  public List<Coord> allActiveCells() {
+    return new ArrayList<>(this.grid.keySet());
   }
 }
 

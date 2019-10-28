@@ -1,7 +1,6 @@
 package edu.cs3500.spreadsheets.vistors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,7 +12,7 @@ import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
 /**
- * Answers if there is a cycle in this Sexp
+ * Answers if there is a cycle in this Sexp in the context of the provided model.
  */
 public class CycleVisitor implements SexpVisitor<Boolean> {
 
@@ -52,6 +51,7 @@ public class CycleVisitor implements SexpVisitor<Boolean> {
       Matcher m = r.matcher(s);
       m.find();
       String cell = model.getCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)));
+
       Coord c = new Coord(
               Coord.colNameToIndex(m.group(1)),
               Integer.parseInt(m.group(2)));
@@ -59,11 +59,39 @@ public class CycleVisitor implements SexpVisitor<Boolean> {
         return false;
       }
       Sexp ex = Parser.parse(cell);
+
       if (this.visited.contains(c)) {
         return true;
       }
       this.visited.add(c);
       return ex.accept(new CycleVisitor(this.model, new ArrayList<>(this.visited)));
+
+    } else if (s.matches("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$")) {
+      Pattern r = Pattern.compile("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$");
+      Matcher m = r.matcher(s);
+      m.find();
+
+      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) &&
+              Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
+        return false;
+      }
+
+      for (int col = Coord.colNameToIndex(m.group(1)); col <= Coord.colNameToIndex(m.group(3));
+           col++) {
+        for (int row = Integer.parseInt(m.group(2)); row <= Integer.parseInt(m.group(4)); row++) {
+          String cell = model.getCellAt(col, row);
+          Coord coord = new Coord(col, row);
+          if (cell == null) {
+            continue;
+          }
+          Sexp exp = Parser.parse(cell);
+          if (this.visited.contains(coord)) {
+            return true;
+          }
+          this.visited.add(coord);
+          return exp.accept(new CycleVisitor(this.model, new ArrayList<>(this.visited)));
+        }
+      }
     }
     return false;
   }

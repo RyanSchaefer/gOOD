@@ -11,6 +11,9 @@ import edu.cs3500.spreadsheets.sexp.SString;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Strictly visits strings otherwise turns a string into lower case.
+ */
 public class StringVisitor implements SexpVisitor<Sexp> {
 
   IWorksheet model;
@@ -41,7 +44,7 @@ public class StringVisitor implements SexpVisitor<Sexp> {
       Pattern r = Pattern.compile("^(A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
       Sexp ex = Parser.parse(
-              model.getCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)))
+              model.evaluateCellAt(Coord.colNameToIndex(m.group(0)), Integer.parseInt(m.group(1)))
       );
 
       if (ex == null) {

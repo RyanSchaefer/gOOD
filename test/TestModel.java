@@ -13,11 +13,19 @@ import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 
+
+/**
+ * The tests for the model we are implementing.
+ */
 abstract public class TestModel {
 
   abstract IWorksheet model(String file);
 
-  static public class TestWithBasic extends TestModel{
+
+  /**
+   * Tests with a basic model.
+   */
+  static public class TestWithBasic extends TestModel {
     @Override
     IWorksheet model(String file) {
       try {
@@ -56,7 +64,7 @@ abstract public class TestModel {
     assertEquals(String.format("%f", 4.0), sheet.getCellAt(2, 1));
     assertEquals(String.format("%f", 9.0), sheet.getCellAt(3, 1));
     assertEquals(String.format("%f", 12.0), sheet.getCellAt(4, 1));
-    assertEquals("(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1,2));
+    assertEquals("(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1, 2));
     assertEquals("(PRODUCT (SUM D1 B1) (SUM D1 B1))", sheet.getCellAt(2, 2));
     assertEquals(String.format("(< A3 %f)", 10.0), sheet.getCellAt(2, 3));
   }
@@ -70,9 +78,9 @@ abstract public class TestModel {
   @Test
   public void changeCellValue() {
     IWorksheet sheet = model("test1.gOOD");
-    assertEquals(String.format("%f", 3.0), sheet.getCellAt(1, 1));
+    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1));
     sheet.changeCellAt(1, 1, "5");
-    assertEquals(String.format("%f", 5.0), sheet.getCellAt(1, 1));
+    assertEquals(String.format("%f", 5.0), sheet.evaluateCellAt(1, 1));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -136,7 +144,7 @@ abstract public class TestModel {
 
   @Test
   public void circularReferenceCausesErrorWithSheet() {
-    IWorksheet sheet = model("test2.gOOD");
+    IWorksheet sheet = model("test4.gOOD");
     assertFalse(sheet.documentFreeOfErrors());
   }
 
@@ -162,7 +170,7 @@ abstract public class TestModel {
     IWorksheet sheet = model("test1.gOOD");
     sheet.changeCellAt(1, 1, "A1");
     sheet.changeCellAt(0, 0, "B2");
-    sheet.evaulateCellAt(1, 1);
+    sheet.evaluateCellAt(1, 1);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -177,6 +185,16 @@ abstract public class TestModel {
   public void changeTypeMismatch1() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "(< 2.2 \"test\")");
+    sheet.evaluateCellAt(1, 1);
+  }
+
+  @Test
+  public void changingCellPropagatesChanges() {
+    IWorksheet sheet = model("test2.gOOD");
+    assertEquals(String.format("%f", 163840.0), sheet.evaluateCellAt(1, 18));
+    sheet.changeCellAt(1, 1, "3");
+    sheet.changeCellAt(1, 2, "5");
+    assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18));
   }
 
   @Test(expected = IllegalArgumentException.class)

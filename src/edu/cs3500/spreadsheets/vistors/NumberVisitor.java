@@ -1,6 +1,5 @@
 package edu.cs3500.spreadsheets.vistors;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -10,16 +9,20 @@ import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.SList;
-import edu.cs3500.spreadsheets.sexp.SSymbol;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+
+/**
+ * Converts any Sexp into a number given a function to combine the numbers and a base to return if
+ * the expression should be ignored.
+ */
 public class NumberVisitor implements SexpVisitor<Double> {
   private double base;
   private IWorksheet model;
   private BiFunction<Double, Double, Double> function;
 
-  public NumberVisitor(double base, IWorksheet model, BiFunction<Double, Double, Double> function) {
+  NumberVisitor(double base, IWorksheet model, BiFunction<Double, Double, Double> function) {
     this.base = base;
     this.model = model;
     this.function = function;
@@ -38,9 +41,9 @@ public class NumberVisitor implements SexpVisitor<Double> {
   @Override
   public Double visitSList(List<Sexp> l) {
     try {
-       return new SList(l).accept(
-               new EvalVisitor(this.model)).accept(
-                       new NumberVisitor(base, this.model, this.function));
+      return new SList(l).accept(
+              new EvalVisitor(this.model)).accept(
+              new NumberVisitor(base, this.model, this.function));
     } catch (IllegalArgumentException e) {
       return base;
     }
@@ -54,7 +57,7 @@ public class NumberVisitor implements SexpVisitor<Double> {
       Matcher m = r.matcher(s);
       m.find();
       Sexp ex = Parser.parse(
-              model.getCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)))
+              model.evaluateCellAt(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)))
       );
 
       if (ex == null) {
@@ -66,17 +69,22 @@ public class NumberVisitor implements SexpVisitor<Double> {
       Pattern r = Pattern.compile("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(s);
       m.find();
-      ArrayList<Sexp> dependencies = new ArrayList<>();
 
       double sofar = base;
 
-      for (int col = Coord.colNameToIndex(m.group(1)); col < Coord.colNameToIndex(m.group(3));
+      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) &&
+              Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
+        return base;
+      }
+
+      for (int col = Coord.colNameToIndex(m.group(1)); col <= Coord.colNameToIndex(m.group(3));
            col++) {
-        for (int row = Integer.parseInt(m.group(2)); row < Integer.parseInt(m.group(4)); row++) {
-          Sexp cell = Parser.parse(model.getCellAt(col, row));
-          if (cell == null) {
+        for (int row = Integer.parseInt(m.group(2)); row <= Integer.parseInt(m.group(4)); row++) {
+          String scell = model.evaluateCellAt(col, row);
+          if (scell == null) {
             continue;
           }
+          Sexp cell = Parser.parse(scell);
           sofar = function.apply(sofar, cell.accept(this));
         }
       }

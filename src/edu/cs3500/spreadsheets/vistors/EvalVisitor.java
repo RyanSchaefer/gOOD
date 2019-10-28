@@ -12,6 +12,11 @@ import edu.cs3500.spreadsheets.sexp.SSymbol;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Evaluate the given Sexp in the context of the provided model. The Sexp returned with be a "base"
+ * level Sexp that does not have symbols, or lists. The Sexp must be checked for cycles with {@link
+ * CycleVisitor} before hand.
+ */
 public class EvalVisitor implements SexpVisitor<Sexp> {
 
   private IWorksheet model;
@@ -32,23 +37,30 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
 
   @Override
   public Sexp visitSList(List<Sexp> l) throws IllegalArgumentException {
+    List<Sexp> sublist = l.subList(1, l.size());
     switch (l.get(0).toString().toLowerCase()) {
       case "product":
+        if (sublist.size() == 0) {
+          throw new IllegalArgumentException("Product needs at least one argument");
+        }
         return productHelp(l.subList(1, l.size()));
       case "sum":
+        if (sublist.size() == 0) {
+          throw new IllegalArgumentException("Sum needs at least one argument");
+        }
         return sumHelp(l.subList(1, l.size()));
       case "<":
         if (l.size() == 3) {
-         return lessThanHelp(l.get(1), l.get(2));
+          return lessThanHelp(l.get(1), l.get(2));
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Incorrect number of arguments for <.");
       case "lowercase":
         if (l.size() == 2) {
           return lowercaseHelp(l.get(1));
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Incorrect number of arguments for lowercase");
       default:
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Invalid function");
     }
   }
 
@@ -64,7 +76,7 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
 
   private Sexp productHelp(List<Sexp> s) {
     double product = 1;
-    for (Sexp x: s) {
+    for (Sexp x : s) {
       product *= x.accept(new NumberVisitor(1, this.model, new MultFunction()));
     }
     return new SNumber(product);
@@ -72,7 +84,7 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
 
   private Sexp sumHelp(List<Sexp> s) {
     double sum = 0;
-    for (Sexp x: s) {
+    for (Sexp x : s) {
       sum += x.accept(new NumberVisitor(0, this.model, new SumFunction()));
     }
     return new SNumber(sum);
@@ -81,7 +93,7 @@ public class EvalVisitor implements SexpVisitor<Sexp> {
   private Sexp lessThanHelp(Sexp s1, Sexp s2) {
     return new SBoolean(
             s1.accept(new StrictNumberVisitor(this.model)) <
-            s2.accept(new StrictNumberVisitor(this.model)));
+                    s2.accept(new StrictNumberVisitor(this.model)));
   }
 
   private Sexp lowercaseHelp(Sexp s) {
