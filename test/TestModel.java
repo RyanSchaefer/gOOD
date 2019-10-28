@@ -87,7 +87,7 @@ abstract public class TestModel {
   public void evaluateCellWithError() {
     IWorksheet sheet = model("test2.gOOD");
     // The cell at the given coordinates has a circular reference error
-    sheet.evaulateCellAt(1, 1);
+    sheet.evaluateCellAt(2, 2);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -95,7 +95,7 @@ abstract public class TestModel {
     IWorksheet sheet = model("test2.gOOD");
     // The cell at the given coordinates DOES NOT directly contain an error, however there is
     // a circular reference error within the function that makes up the cell
-    sheet.evaulateCellAt(2, 4);
+    sheet.evaluateCellAt(2, 4);
     // When B4 =(SUM B1:B3) this does not throw an error but should
   }
 
@@ -103,31 +103,31 @@ abstract public class TestModel {
   public void evaluateCellInvalidColumn() {
     IWorksheet sheet = model("test2.gOOD");
     // Column must be > 0
-    sheet.evaulateCellAt(0, 4);
+    sheet.evaluateCellAt(0, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void evaluateCellInvalidRow() {
     IWorksheet sheet = model("test2.gOOD");
     // Row must be > 0
-    sheet.evaulateCellAt(4, 0);
+    sheet.evaluateCellAt(4, 0);
   }
 
   @Test
   public void evalCell() {
     IWorksheet sheet = model("test1.gOOD");
     // If the cell at the given coordinates is null:
-    assertNull(null, sheet.evaulateCellAt(123, 123));
+    assertNull(null, sheet.evaluateCellAt(123, 123));
     // If the cell at the given coordinates is NOT null:
-    assertEquals(String.format("%f", 3.0),  sheet.evaulateCellAt(1, 1));
-    assertEquals(String.format("%f", 144.0), sheet.evaulateCellAt(1, 2));
+    assertEquals(String.format("%f", 3.0),  sheet.evaluateCellAt(1, 1));
+    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1, 2));
   }
 
   @Test
   public void evalCell2() {
     IWorksheet sheet = model("test3.gOOD");
-    assertEquals("\"hello\"",  sheet.evaulateCellAt(1, 1));
-    assertEquals("true", sheet.evaulateCellAt(1, 2));
+    assertEquals("\"hello\"",  sheet.evaluateCellAt(1, 1));
+    assertEquals("true", sheet.evaluateCellAt(1, 2));
   }
 
   @Test(expected = IllegalArgumentException.class)
