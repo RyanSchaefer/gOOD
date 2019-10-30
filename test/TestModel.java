@@ -232,14 +232,6 @@ abstract public class TestModel {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void changeToInvalidSexp() {
-    IWorksheet sheet = model("test1.gOOD");
-    sheet.changeCellAt(1, 1, "(SUM 3 3 4)");
-  }
-
-  // NONE OF THESE WORK PROPERLY YET (but they pass)
-
-  @Test(expected = IllegalArgumentException.class)
   public void changeTypeMismatch1() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "(< 2.2 \"test\")");
@@ -254,35 +246,4 @@ abstract public class TestModel {
     sheet.changeCellAt(1, 2, "5");
     assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18));
   }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void changeTypeMismatch2() {
-    IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(< 3.5 false)");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void changeTypeMismatch3() {
-    IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(SUM 3 5)");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void changeTypeMismatch4() {
-    IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(PRODUCT 4 \"test\")");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void changeTypeMismatch5() {
-    IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(PRODUCT 4 true)");
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void changeTypeMismatch6() {
-    IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(PRODUCT 4 \"test\")");
-  }
-
 }
