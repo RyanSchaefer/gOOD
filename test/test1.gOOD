@@ -5,6 +5,8 @@ C1 9
 D1 12
 A3 2
 
+A4 =(LOWERCASE "TEST")
+
 # Computes delta-x^2
 A2 =(PRODUCT (SUM C1 A1) (SUM C1 A1))
 # Computes delta-y^2

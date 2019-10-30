@@ -41,7 +41,7 @@ public class Parser {
       }
     }
     catch (IllegalArgumentException a) {
-      throw new IllegalArgumentException("Badly formatted sexp: " + in + "\n" + a);
+      throw new IllegalArgumentException("Incorrectly formatted sexp: " + in + "\n" + a);
     }
   }
 
