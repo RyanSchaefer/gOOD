@@ -378,4 +378,18 @@ abstract public class TestModel {
     sheet.changeCellAt(1, 1, "=(PRODUCT 4 \"test\")");
     assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void invalidReference() {
+    IWorksheet sheet = model("empty.gOOD");
+    sheet.changeCellAt(1, 1, "=B1:A1");
+    sheet.evaluateCellAt(1, 1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void invalidReference2() {
+    IWorksheet sheet = model("empty.gOOD");
+    sheet.changeCellAt(1, 1, "=(Sum B1:A1)");
+    sheet.evaluateCellAt(1, 1);
+  }
 }
