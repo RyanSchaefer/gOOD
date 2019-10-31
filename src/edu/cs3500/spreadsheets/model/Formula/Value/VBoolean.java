@@ -1,9 +1,12 @@
-package edu.cs3500.spreadsheets.model;
+package edu.cs3500.spreadsheets.model.Formula.Value;
 
 
+/**
+ * A boolean value.
+ */
 public class VBoolean extends AbstractValue {
 
-  Boolean value;
+  private Boolean value;
 
   public VBoolean(boolean b) {
     this.value = b;

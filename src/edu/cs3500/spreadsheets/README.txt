@@ -3,33 +3,31 @@ Interfaces -
 It should allow observation about the cells as well as changes to the cells. There are also
 convenience functions like getActiveCells that allow for the model to be drawn more
 efficiently.
-- Should we need to change how the actual behind the scenes of Worksheets is implemented (say we
-wanted to change how cells are implemented) we wouldn't have to change the view or the model since
-they are coded against the interface and not the specific implementation.
+- Formula - is one of A Value, Function, or Reference
+- Value - is one of a VBoolean, VString, or VDouble
 
 Classes
-- Basic Worksheet - Basic worksheet implements IWorksheet using a Map<Coord, Sexp>. In this
-environment, everything is essentially a function which returns to the value of the cell. This means
-that every cell can accept any visitor that it needs to to transform the expression.
+- Basic Worksheet - Basic worksheet implements IWorksheet using a Map<Coord, Formula>. In this
+environment, everything is essentially a function which evaluates to the value of the cell.
+- Reference - A Reference, evaluates to a list of value
+- AbstractValue - all Values extend this.
+- VBoolean - evaluates to a Boolean and null otherwise.
+- VDouble - evaluates to a Double and null otherwise.
+- VString - evaluates to a String and null otherwise.
+- ValueHolder - holds an evaluated list of value for use elsewhere.
+- ErrorFunction - this cell could not be converted to one of the other functions so it should
+- - always throw an error when evaluating and return the string which was malformed and used
+- - to create it
+- LessThanFunc - takes in two formula which strictly evaluates to Double and returns a list
+- - VBoolean in it.
+- LowerCase - takes in one formula which strictly evaluates to a String and returns the lowercase
+- - VString of that String.
+- ProductFunc - takes in an arbitrary amount of Formula that evaluate to anything and ignores them
+- - if they aren't numbers. Defaults to 0. Multiplies them together.
+- ProductFunc - takes in an arbitrary amount of Formula that evaluate to anything and ignores them
+- - if they aren't numbers. Defaults to 0. Sums them together.
 
 Visitors
-- All of the visitors created are essentially just functions we want to run over cells
-- Most of the visitors must be evaluated in some context, and that context is the model it ends
-up being constructed with
-- Specific visitors
-- - Dependency Visitor - needed to evaluate cycles, gets all of the cells that this Sexp depends
-upon
-- - EvalVisitor - evaluates the Sexp to its simplest form given the model context it should be
-evaluated in
-- - NumberVisitor - turns this Sexp into a Number no matter what. If this Sexp cannot be converted
-directly into a number, then it should return the base number provided when it was created. This
-function also takes in a function which takes in two numbers and converts them into one number for
-ranges of numbers.
-- - PrintVisitor - only needed since Sexp doubles don't format to %f.
-- - StrictNumberVisitor - only visits numbers otherwise throws an error because the caller of this
-needs Numbers only to preserve types.
-- - StringVisitor - only visits strings otherwise throws an error because the call of this expected
-to deal with only numbers.
-
-Functions
-- function objects that do what they say on the tin.
+- SexpToFormula - turns this Sexp into a Formula
+- SexpToValue - this this Sexp into a Value (if it looks like a function, turn it into a string).
+- DependencyVisitor - get the dependencies in this Sexp.

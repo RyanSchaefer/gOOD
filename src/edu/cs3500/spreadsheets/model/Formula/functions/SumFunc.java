@@ -1,13 +1,17 @@
-package edu.cs3500.spreadsheets.functions;
+package edu.cs3500.spreadsheets.model.Formula.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula;
-import edu.cs3500.spreadsheets.model.VDouble;
-import edu.cs3500.spreadsheets.model.Value;
+import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.Formula.Value.VDouble;
+import edu.cs3500.spreadsheets.model.Formula.Value.Value;
 
+/**
+ * The class representing the summation function. Takes in any number of formula which evaluate to
+ * anything.
+ */
 public class SumFunc implements Formula {
 
   private List<Formula> contents;

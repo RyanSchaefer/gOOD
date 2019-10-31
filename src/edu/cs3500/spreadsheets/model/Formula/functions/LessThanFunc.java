@@ -1,17 +1,21 @@
-package edu.cs3500.spreadsheets.functions;
+package edu.cs3500.spreadsheets.model.Formula.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula;
-import edu.cs3500.spreadsheets.model.VBoolean;
-import edu.cs3500.spreadsheets.model.Value;
+import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.Formula.Value.VBoolean;
+import edu.cs3500.spreadsheets.model.Formula.Value.Value;
 
+/**
+ * The class which represents the less than formula. Takes in two formulas which strictly evaluate
+ * down to numbers.
+ */
 public class LessThanFunc implements Formula {
 
   private List<Formula> contents;
-  String original;
+  private String original;
 
   public LessThanFunc(List<Formula> contents, String original) {
     this.contents = contents;

@@ -1,17 +1,20 @@
-package edu.cs3500.spreadsheets.functions;
+package edu.cs3500.spreadsheets.model.Formula.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula;
-import edu.cs3500.spreadsheets.model.VString;
-import edu.cs3500.spreadsheets.model.Value;
+import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.Formula.Value.VString;
+import edu.cs3500.spreadsheets.model.Formula.Value.Value;
 
+/**
+ * The class representing the lowercase function. Takes in one formula which evaluates to a string.
+ */
 public class LowerCase implements Formula {
 
-  List<Formula> contents;
-  String original;
+  private List<Formula> contents;
+  private String original;
 
   public LowerCase(List<Formula> contents, String original) {
     this.contents = contents;

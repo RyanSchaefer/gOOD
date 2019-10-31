@@ -1,8 +1,14 @@
-package edu.cs3500.spreadsheets.model;
+package edu.cs3500.spreadsheets.model.Formula.Value;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.cs3500.spreadsheets.model.Formula.Formula;
+
+/**
+ * A placeholder value used in the eval map. Evaluates to itself but to String is first in the array
+ * list which should already be evaluated.
+ */
 public class ValueHolder implements Formula {
 
   private List<Value> placeholder;

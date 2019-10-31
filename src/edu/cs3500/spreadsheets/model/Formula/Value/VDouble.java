@@ -1,9 +1,12 @@
-package edu.cs3500.spreadsheets.model;
+package edu.cs3500.spreadsheets.model.Formula.Value;
 
 
+/**
+ * A Double value.
+ */
 public class VDouble extends AbstractValue {
 
-  double value;
+  private double value;
 
   public VDouble(double d) {
     this.value = d;

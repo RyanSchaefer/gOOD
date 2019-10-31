@@ -1,18 +1,18 @@
-import edu.cs3500.spreadsheets.model.BasicWorksheet.BasicWorksheetBuilder;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
+import edu.cs3500.spreadsheets.model.BasicWorksheet.BasicWorksheetBuilder;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -67,7 +67,7 @@ abstract public class TestModel {
     sheet.changeCellAt(1, 2, "8");
     sheet.changeCellAt(1, 3, "true");
     sheet.changeCellAt(1, 4, "\"test\"");
-    sheet.changeCellAt(2, 1, ("(SUM A1 A2)"));
+    sheet.changeCellAt(2, 1, ("=(SUM A1 A2)"));
 
     // spreadsheet now has values
     assertEquals(5, sheet.allActiveCells().size());
@@ -243,7 +243,7 @@ abstract public class TestModel {
   @Test(expected = IllegalArgumentException.class)
   public void changeTypeMismatch1() {
     IWorksheet sheet = model("empty.gOOD");
-    sheet.changeCellAt(1, 1, "(< 2.2 \"test\")");
+    sheet.changeCellAt(1, 1, "=(< 2.2 \"test\")");
     sheet.evaluateCellAt(1, 1);
   }
 

@@ -3,17 +3,17 @@ package edu.cs3500.spreadsheets.vistors;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.functions.ErrorFunction;
-import edu.cs3500.spreadsheets.functions.LessThanFunc;
-import edu.cs3500.spreadsheets.functions.LowerCase;
-import edu.cs3500.spreadsheets.functions.ProductFunc;
-import edu.cs3500.spreadsheets.functions.SumFunc;
-import edu.cs3500.spreadsheets.model.Formula;
+import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.Formula.Reference;
+import edu.cs3500.spreadsheets.model.Formula.Value.VBoolean;
+import edu.cs3500.spreadsheets.model.Formula.Value.VDouble;
+import edu.cs3500.spreadsheets.model.Formula.Value.VString;
+import edu.cs3500.spreadsheets.model.Formula.functions.ErrorFunction;
+import edu.cs3500.spreadsheets.model.Formula.functions.LessThanFunc;
+import edu.cs3500.spreadsheets.model.Formula.functions.LowerCase;
+import edu.cs3500.spreadsheets.model.Formula.functions.ProductFunc;
+import edu.cs3500.spreadsheets.model.Formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.model.IWorksheet;
-import edu.cs3500.spreadsheets.model.Reference;
-import edu.cs3500.spreadsheets.model.VBoolean;
-import edu.cs3500.spreadsheets.model.VDouble;
-import edu.cs3500.spreadsheets.model.VString;
 import edu.cs3500.spreadsheets.sexp.SList;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
@@ -51,7 +51,7 @@ public class SexpToFormula implements SexpVisitor<Formula> {
      case "<":
        return new LessThanFunc(map(l.subList(1, l.size())), new SList(l).toString());
     }
-    return new ErrorFunction(new ArrayList<>(), new SList(l).toString());
+    return new ErrorFunction(new SList(l).toString());
   }
 
   public List<Formula> map(List<Sexp> l) {

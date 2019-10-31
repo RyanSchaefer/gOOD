@@ -1,10 +1,17 @@
-package edu.cs3500.spreadsheets.model;
+package edu.cs3500.spreadsheets.model.Formula;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.cs3500.spreadsheets.model.Coord;
+import edu.cs3500.spreadsheets.model.Formula.Value.Value;
+import edu.cs3500.spreadsheets.model.IWorksheet;
+
+/**
+ * A reference to another cell or rectangular region of cells.
+ */
 public class Reference implements Formula {
 
   private IWorksheet model;
