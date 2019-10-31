@@ -4,25 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
-import edu.cs3500.spreadsheets.model.Formula.Reference;
-import edu.cs3500.spreadsheets.model.Formula.Value.VBoolean;
-import edu.cs3500.spreadsheets.model.Formula.Value.VDouble;
-import edu.cs3500.spreadsheets.model.Formula.Value.VString;
-import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
-import edu.cs3500.spreadsheets.model.Formula.functions.ErrorFunction;
 import edu.cs3500.spreadsheets.model.IWorksheet;
+import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.Reference;
+import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
+import edu.cs3500.spreadsheets.model.formula.functions.IFunction;
+import edu.cs3500.spreadsheets.model.formula.value.VBoolean;
+import edu.cs3500.spreadsheets.model.formula.value.VDouble;
+import edu.cs3500.spreadsheets.model.formula.value.VString;
 import edu.cs3500.spreadsheets.sexp.SList;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 
+/**
+ * Converts an Sexp into a formula based on the fact that it had an = sign infront of it. Thus all
+ * strings that look like functions should be treated as functions.
+ */
 public class SexpToFormula implements SexpVisitor<Formula> {
 
   private IWorksheet model;
-  private Map<String, AbstractFunction> functions;
+  private Map<String, IFunction> functions;
+  private String original;
 
-  public SexpToFormula(IWorksheet model, Map<String, AbstractFunction> functions) {
+  /**
+   * Constructs an SexpToFormula.
+   *
+   * @param model     the model which to construct it over
+   * @param original  the string that was used to construct this
+   * @param functions the functions that are supported
+   */
+  public SexpToFormula(IWorksheet model, String original, Map<String, IFunction> functions) {
     this.model = model;
+    this.original = original;
     this.functions = functions;
   }
 
@@ -44,12 +57,12 @@ public class SexpToFormula implements SexpVisitor<Formula> {
     String function = l.get(0).toString().toLowerCase();
     if (functions.containsKey(function)) {
       return functions.get(function).build(
-              map(l.subList(1, l.size())), "=" + new SList(l).toString());
+              map(l.subList(1, l.size())), "=" + original);
     }
     return new ErrorFunction(new SList(l).toString());
   }
 
-  public List<Formula> map(List<Sexp> l) {
+  private List<Formula> map(List<Sexp> l) {
     List<Formula> ret = new ArrayList<>();
     for (Sexp s: l) {
       ret.add(s.accept(this));
@@ -59,7 +72,7 @@ public class SexpToFormula implements SexpVisitor<Formula> {
 
   @Override
   public Formula visitSymbol(String s) {
-    return new Reference(model, s);
+    return new Reference(model,  s);
   }
 
   @Override

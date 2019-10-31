@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.model.Formula.Value;
+package edu.cs3500.spreadsheets.model.formula.value;
 
 /**
  * A value is one of a String, Double, or Boolean.

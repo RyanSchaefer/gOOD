@@ -2,7 +2,7 @@ package edu.cs3500.spreadsheets.model;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.Formula;
 
 
 /**
@@ -23,8 +23,9 @@ public interface IWorksheet {
    * @param col the column of the cell, 1 indexed
    * @param row the row of the cell, 1 indexed
    * @return the cell or null
+   * @throws IllegalArgumentException col or row are less than 0
    */
-  String getCellAt(int col, int row);
+  String getCellAt(int col, int row) throws IllegalArgumentException;
 
   /**
    * Returns the final representation of the cell at the given coordinates, evaluated in the
@@ -41,10 +42,8 @@ public interface IWorksheet {
    * @param col the column of the cell, 1 indexed
    * @param row the row of the cell, 1 indexed
    * @param sexp the String representation of the Sexp to change the cell to
-   * @throws IllegalArgumentException String is null or invalid expression
-   *     valid-ness of expressions is determined by if the String is a valid {@code Sexp}
    */
-  void changeCellAt(int col, int row, String sexp) throws IllegalArgumentException;
+  void changeCellAt(int col, int row, String sexp);
 
   /**
    * Answers if the entire document is free of errors.

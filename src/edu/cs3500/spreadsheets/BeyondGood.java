@@ -9,13 +9,14 @@ import java.util.regex.Pattern;
 
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.Coord;
-import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
-import edu.cs3500.spreadsheets.model.Formula.functions.LessThanFunc;
-import edu.cs3500.spreadsheets.model.Formula.functions.LowerCase;
-import edu.cs3500.spreadsheets.model.Formula.functions.ProductFunc;
-import edu.cs3500.spreadsheets.model.Formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
+import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.functions.IFunction;
+import edu.cs3500.spreadsheets.model.formula.functions.LessThanFunc;
+import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
+import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
+import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
 
 /**
  * The main class for our program.
@@ -26,7 +27,7 @@ public class BeyondGood {
    * @param args any command-line arguments
    */
   public static void main(String[] args) {
-    Map<String, AbstractFunction> functionsSupported = new HashMap<>();
+    Map<String, IFunction> functionsSupported = new HashMap<>();
     functionsSupported.put("lowercase", new LowerCase());
     functionsSupported.put("<", new LessThanFunc());
     functionsSupported.put("product", new ProductFunc());
@@ -41,11 +42,17 @@ public class BeyondGood {
         m.find();
         Coord cell = new Coord(Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2)));
 
-        IWorksheet model = WorksheetReader.read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+        IWorksheet model = WorksheetReader.read(
+                new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
                 new FileReader(args[1]));
 
         if (model.documentFreeOfErrors()) {
-          System.out.print(model.evaluateCellAt(cell.col, cell.row));
+          Formula eval = model.evaluateCellAt(cell.col, cell.row);
+          if (eval == null) {
+            System.out.print("");
+          } else {
+            System.out.print(eval.toString());
+          }
         } else {
           for (Coord c : model.allActiveCells()) {
             try {

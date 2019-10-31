@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.model.Formula.Value;
+package edu.cs3500.spreadsheets.model.formula.value;
 
 
 /**
@@ -19,6 +19,6 @@ public class VString extends AbstractValue {
 
   @Override
   public String toString() {
-    return "\""+ value + "\"";
+    return "\"" + value + "\"";
   }
 }

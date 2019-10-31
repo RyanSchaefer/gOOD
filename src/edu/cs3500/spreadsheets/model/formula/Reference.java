@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.model.Formula;
+package edu.cs3500.spreadsheets.model.formula;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.cs3500.spreadsheets.model.Coord;
-import edu.cs3500.spreadsheets.model.Formula.Value.Value;
 import edu.cs3500.spreadsheets.model.IWorksheet;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A reference to another cell or rectangular region of cells.
@@ -16,10 +16,18 @@ public class Reference implements Formula {
 
   private IWorksheet model;
   private List<Coord> references;
+  private String original;
 
-  public Reference (IWorksheet model, String cells) {
+  /**
+   * Constructs a Reference.
+   *
+   * @param model the model to which the reference points to
+   * @param cells a string which represents the cells pointed to
+   */
+  public Reference(IWorksheet model, String cells) {
     this.model = model;
     references = parseReferences(cells);
+    original = cells;
   }
 
   @Override
@@ -63,7 +71,6 @@ public class Reference implements Formula {
 
   @Override
   public String toString() {
-    Coord v = references.get(0);
-    return model.evaluateCellAt(v.col, v.row).toString();
+    return "=" + original;
   }
 }

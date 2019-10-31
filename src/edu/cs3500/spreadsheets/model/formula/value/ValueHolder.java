@@ -1,9 +1,9 @@
-package edu.cs3500.spreadsheets.model.Formula.Value;
+package edu.cs3500.spreadsheets.model.formula.value;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.Formula;
 
 /**
  * A placeholder value used in the eval map. Evaluates to itself but to String is first in the array

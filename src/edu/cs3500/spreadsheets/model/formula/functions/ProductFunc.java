@@ -1,23 +1,29 @@
-package edu.cs3500.spreadsheets.model.Formula.functions;
+package edu.cs3500.spreadsheets.model.formula.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
-import edu.cs3500.spreadsheets.model.Formula.Value.VDouble;
-import edu.cs3500.spreadsheets.model.Formula.Value.Value;
+import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.VDouble;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * The class representing the product function. Takes in any number of formula which evaluate to
  * anything.
  */
-public class ProductFunc extends AbstractFunction {
+public class ProductFunc implements IFunction {
 
   private List<Formula> contents = new ArrayList<>();
   private String original = "";
 
+  /**
+   * Allows a default way of constructing this method.
+   */
   public ProductFunc() {
+    /*
+    Return the default product func.
+     */
   }
 
   private ProductFunc(List<Formula> contents, String original) {

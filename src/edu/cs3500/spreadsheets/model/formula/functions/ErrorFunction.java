@@ -1,14 +1,14 @@
-package edu.cs3500.spreadsheets.model.Formula.functions;
+package edu.cs3500.spreadsheets.model.formula.functions;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
-import edu.cs3500.spreadsheets.model.Formula.Value.Value;
+import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A function which holds the formula that created this error.
  */
-public class ErrorFunction extends AbstractFunction {
+public class ErrorFunction implements IFunction {
 
   private String original;
 

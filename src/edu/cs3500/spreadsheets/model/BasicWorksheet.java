@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import edu.cs3500.spreadsheets.model.Formula.Formula;
-import edu.cs3500.spreadsheets.model.Formula.Value.VString;
-import edu.cs3500.spreadsheets.model.Formula.Value.ValueHolder;
-import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
-import edu.cs3500.spreadsheets.model.Formula.functions.ErrorFunction;
+import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
+import edu.cs3500.spreadsheets.model.formula.functions.IFunction;
+import edu.cs3500.spreadsheets.model.formula.value.VString;
+import edu.cs3500.spreadsheets.model.formula.value.ValueHolder;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.vistors.DependencyVisitor;
@@ -34,9 +34,9 @@ public class BasicWorksheet implements IWorksheet {
   // builds a list of expressions that have evaluated, when a cell changes this is reset
   private Map<Coord, Formula> evalMap = new HashMap<>();
 
-  private Map<String, AbstractFunction> functions;
+  private Map<String, IFunction> functions;
 
-  private BasicWorksheet(Map<String, AbstractFunction> functions) {
+  private BasicWorksheet(Map<String, IFunction> functions) {
     this.functions = functions;
   }
 
@@ -51,7 +51,7 @@ public class BasicWorksheet implements IWorksheet {
     /**
      * Return a basic worksheet builder to build with.
      */
-    public BasicWorksheetBuilder(Map<String, AbstractFunction> functions) {
+    public BasicWorksheetBuilder(Map<String, IFunction> functions) {
       model = new BasicWorksheet(functions);
     }
 
@@ -102,16 +102,18 @@ public class BasicWorksheet implements IWorksheet {
     Coord coord = new Coord(col, row);
 
     removeDep(coord);
+    removeDepFromEval(coord);
 
     if (s == null) {
-      throw new IllegalArgumentException();
+      grid.remove(coord);
+      return;
     }
     Sexp sexp;
     if (s.startsWith("=")) {
       s = s.substring(1);
       try {
         sexp = Parser.parse(s);
-        grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this, functions)));
+        grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this, s, functions)));
         updateDependents(sexp, new Coord(col, row));
       } catch (IllegalArgumentException e) {
         // This isn't a valid Sexp so make it an error
@@ -127,7 +129,6 @@ public class BasicWorksheet implements IWorksheet {
         return;
       }
     }
-    removeDepFromEval(coord);
   }
 
   /**
@@ -137,7 +138,7 @@ public class BasicWorksheet implements IWorksheet {
    * @param coord the coordinate that changed
    */
   private void removeDepFromEval(Coord coord) {
-    for (Coord dep: getDependents(coord.col, coord.row)) {
+    for (Coord dep : getDependents(coord.col, coord.row)) {
       evalMap.remove(dep);
     }
     evalMap.remove(coord);
@@ -145,13 +146,14 @@ public class BasicWorksheet implements IWorksheet {
 
   /**
    * Updates the dependents of the given cell given that it was created with this sexp.
-   * @param s the sexp it was created with
+   *
+   * @param s    the sexp it was created with
    * @param cell the cell that this was created at
    */
   private void updateDependents(Sexp s, Coord cell) {
 
     // update which cells depend this cell depends on
-    for (Coord c: s.accept(new DependencyVisitor())) {
+    for (Coord c : s.accept(new DependencyVisitor())) {
       if (dependencies.containsKey(c)) {
         dependencies.get(c).add(cell);
       } else {
@@ -161,7 +163,7 @@ public class BasicWorksheet implements IWorksheet {
   }
 
   /**
-   * Remove all of the references to this cell from the graph of dependencies
+   * Remove all of the references to this cell from the graph of dependencies.
    *
    * @param cell the cell to remove references to
    */
@@ -173,6 +175,7 @@ public class BasicWorksheet implements IWorksheet {
 
   /**
    * Gets all of the cells that depend on the given cell.
+   *
    * @param col the column of the cell
    * @param row the row of the cell
    * @return a list of all of the cells that depend on that cell
@@ -198,9 +201,10 @@ public class BasicWorksheet implements IWorksheet {
   /**
    * A helper function which applies dfs to find all of the dependents of that cells and avoid
    * infinite loops due to cycles.
+   *
    * @param dependents the dependents so far
-   * @param queue the queue of coordinates to process
-   * @param seen what we have seen thus far
+   * @param queue      the queue of coordinates to process
+   * @param seen       what we have seen thus far
    */
   private void dependenciesHelper(List<Coord> dependents, Queue<Coord> queue, List<Coord> seen) {
     while (!queue.isEmpty()) {
@@ -219,7 +223,7 @@ public class BasicWorksheet implements IWorksheet {
 
   @Override
   public boolean documentFreeOfErrors() {
-    for (Coord c: allActiveCells()) {
+    for (Coord c : allActiveCells()) {
       try {
         evaluateCellAt(c.col, c.row);
       } catch (IllegalArgumentException e) {

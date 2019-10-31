@@ -1,8 +1,8 @@
-package edu.cs3500.spreadsheets.model.Formula;
+package edu.cs3500.spreadsheets.model.formula;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.Formula.Value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A Function, Reference, or Value.

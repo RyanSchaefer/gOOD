@@ -3,7 +3,8 @@ Interfaces -
 It should allow observation about the cells as well as changes to the cells. There are also
 convenience functions like getActiveCells that allow for the model to be drawn more
 efficiently.
-- Formula - is one of A Value, Function, or Reference
+- Formula - is one of A Value, IFunction, or Reference
+- IFunction - represent any type of function
 - Value - is one of a VBoolean, VString, or VDouble
 
 Classes
