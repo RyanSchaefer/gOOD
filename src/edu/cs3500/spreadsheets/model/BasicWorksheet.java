@@ -101,6 +101,8 @@ public class BasicWorksheet implements IWorksheet {
   public void changeCellAt(int col, int row, String s) {
     Coord coord = new Coord(col, row);
 
+    removeDep(coord);
+
     if (s == null) {
       throw new IllegalArgumentException();
     }
@@ -110,6 +112,7 @@ public class BasicWorksheet implements IWorksheet {
       try {
         sexp = Parser.parse(s);
         grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this, functions)));
+        updateDependents(sexp, new Coord(col, row));
       } catch (IllegalArgumentException e) {
         // This isn't a valid Sexp so make it an error
         grid.put(coord, new ErrorFunction("=" + s));
@@ -125,9 +128,6 @@ public class BasicWorksheet implements IWorksheet {
       }
     }
     removeDepFromEval(coord);
-
-    updateDependents(sexp, new Coord(col, row));
-
   }
 
   /**
@@ -150,11 +150,6 @@ public class BasicWorksheet implements IWorksheet {
    */
   private void updateDependents(Sexp s, Coord cell) {
 
-    // remove all references to this cell
-    for (Coord c: dependencies.keySet()) {
-      dependencies.get(c).remove(cell);
-    }
-
     // update which cells depend this cell depends on
     for (Coord c: s.accept(new DependencyVisitor())) {
       if (dependencies.containsKey(c)) {
@@ -162,6 +157,17 @@ public class BasicWorksheet implements IWorksheet {
       } else {
         dependencies.put(c, new ArrayList<>(Arrays.asList(cell)));
       }
+    }
+  }
+
+  /**
+   * Remove all of the references to this cell from the graph of dependencies
+   *
+   * @param cell the cell to remove references to
+   */
+  private void removeDep(Coord cell) {
+    for (Coord c : dependencies.keySet()) {
+      dependencies.get(c).remove(cell);
     }
   }
 

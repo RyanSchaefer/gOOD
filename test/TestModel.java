@@ -228,16 +228,16 @@ abstract public class TestModel {
   public void changeCellToCircularCausesErrors() {
     IWorksheet sheet = model("test1.gOOD");
     assertTrue(sheet.documentFreeOfErrors());
-    sheet.changeCellAt(1, 1, "A1");
+    sheet.changeCellAt(1, 1, "=A1");
     assertFalse(sheet.documentFreeOfErrors());
   }
 
   @Test
   public void threeCircularCausesErrors() {
     IWorksheet worksheet = model("empty.gOOD");
-    worksheet.changeCellAt(1, 1, "B1");
-    worksheet.changeCellAt(2, 1, "C1");
-    worksheet.changeCellAt(3,1, "A1");
+    worksheet.changeCellAt(1, 1, "=B1");
+    worksheet.changeCellAt(2, 1, "=C1");
+    worksheet.changeCellAt(3, 1, "=A1");
     assertFalse(worksheet.documentFreeOfErrors());
   }
 
@@ -253,8 +253,8 @@ abstract public class TestModel {
   @Test(expected = IllegalArgumentException.class)
   public void changeCellToTwoCircular() {
     IWorksheet sheet = model("test1.gOOD");
-    sheet.changeCellAt(1, 1, "A1");
-    sheet.changeCellAt(0, 0, "B2");
+    sheet.changeCellAt(1, 1, "=A1");
+    sheet.changeCellAt(0, 0, "=B2");
     sheet.evaluateCellAt(1, 1);
   }
 
@@ -290,4 +290,6 @@ abstract public class TestModel {
     assertEquals("=()", sheet.getCellAt(1, 1));
     sheet.evaluateCellAt(1, 1);
   }
+
+
 }
