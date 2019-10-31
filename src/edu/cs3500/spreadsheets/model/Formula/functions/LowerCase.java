@@ -11,14 +11,22 @@ import edu.cs3500.spreadsheets.model.Formula.Value.Value;
 /**
  * The class representing the lowercase function. Takes in one formula which evaluates to a string.
  */
-public class LowerCase implements Formula {
+public class LowerCase extends AbstractFunction {
 
-  private List<Formula> contents;
-  private String original;
+  private List<Formula> contents = new ArrayList<>();
+  private String original = "";
 
-  public LowerCase(List<Formula> contents, String original) {
+  public LowerCase() {
+  }
+
+  private LowerCase(List<Formula> contents, String original) {
     this.contents = contents;
     this.original = original;
+  }
+
+  @Override
+  public Formula build(List<Formula> contents, String original) {
+    return new LowerCase(contents, original);
   }
 
   @Override

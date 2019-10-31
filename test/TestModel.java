@@ -3,9 +3,16 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.BasicWorksheet.BasicWorksheetBuilder;
+import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
+import edu.cs3500.spreadsheets.model.Formula.functions.LessThanFunc;
+import edu.cs3500.spreadsheets.model.Formula.functions.LowerCase;
+import edu.cs3500.spreadsheets.model.Formula.functions.ProductFunc;
+import edu.cs3500.spreadsheets.model.Formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 
@@ -27,11 +34,22 @@ abstract public class TestModel {
    * Tests with a basic model.
    */
   static public class TestWithBasic extends TestModel {
+
+    Map<String, AbstractFunction> functionsSupported = new HashMap<>();
+
+    private void setupFunctions() {
+      functionsSupported.put("lowercase", new LowerCase());
+      functionsSupported.put("<", new LessThanFunc());
+      functionsSupported.put("product", new ProductFunc());
+      functionsSupported.put("sum", new SumFunc());
+    }
+
     @Override
     IWorksheet model(String file) {
+      setupFunctions();
       try {
         return WorksheetReader.
-                read(new BasicWorksheet.BasicWorksheetBuilder(),
+                read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
                         new FileReader(new File("test/" + file)));
 
       } catch (IOException e) {
@@ -43,7 +61,7 @@ abstract public class TestModel {
 
   @Test
   public void createEmptySpreadsheet() {
-    BasicWorksheetBuilder builder = new BasicWorksheet.BasicWorksheetBuilder();
+    BasicWorksheetBuilder builder = new BasicWorksheet.BasicWorksheetBuilder(new HashMap<>());
 
     // Creates an empty spreadsheet
     IWorksheet sheet = builder.createWorksheet();
@@ -55,7 +73,7 @@ abstract public class TestModel {
 
   @Test
   public void createSpreadsheetWithValues() {
-    BasicWorksheetBuilder builder = new BasicWorksheet.BasicWorksheetBuilder();
+    BasicWorksheetBuilder builder = new BasicWorksheet.BasicWorksheetBuilder(new HashMap<>());
 
     // Creates an empty spreadsheet
     IWorksheet sheet = builder.createWorksheet();
@@ -104,10 +122,10 @@ abstract public class TestModel {
     assertEquals(String.format("%f", 4.0), sheet.getCellAt(2, 1));
     assertEquals(String.format("%f", 9.0), sheet.getCellAt(3, 1));
     assertEquals(String.format("%f", 12.0), sheet.getCellAt(4, 1));
-    assertEquals("(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1, 2));
-    assertEquals("(PRODUCT (SUM D1 B1) (SUM D1 B1))", sheet.getCellAt(2, 2));
-    assertEquals("(< A3 10.0)", sheet.getCellAt(2, 3));
-    assertEquals("(LOWERCASE \"TEST\")", sheet.getCellAt(1, 4));
+    assertEquals("=(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1, 2));
+    assertEquals("=(PRODUCT (SUM D1 B1) (SUM D1 B1))", sheet.getCellAt(2, 2));
+    assertEquals("=(< A3 10.0)", sheet.getCellAt(2, 3));
+    assertEquals("=(LOWERCASE \"TEST\")", sheet.getCellAt(1, 4));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -254,5 +272,22 @@ abstract public class TestModel {
     sheet.changeCellAt(1, 1, "3");
     sheet.changeCellAt(1, 2, "5");
     assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18).toString());
+  }
+
+  @Test
+  public void testDefaultValuesAre0() {
+    IWorksheet sheet = model("empty.gOOD");
+    sheet.changeCellAt(1, 1, "=(SUM)");
+    sheet.changeCellAt(1, 2, "=(PRODUCT)");
+    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 2).toString());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testFunctionRequired() {
+    IWorksheet sheet = model("empty.gOOD");
+    sheet.changeCellAt(1, 1, "=()");
+    assertEquals("=()", sheet.getCellAt(1, 1));
+    sheet.evaluateCellAt(1, 1);
   }
 }

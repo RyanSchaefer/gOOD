@@ -12,16 +12,23 @@ import edu.cs3500.spreadsheets.model.Formula.Value.Value;
  * The class representing the product function. Takes in any number of formula which evaluate to
  * anything.
  */
-public class ProductFunc implements Formula {
+public class ProductFunc extends AbstractFunction {
 
-  private List<Formula> contents;
-  private String original;
+  private List<Formula> contents = new ArrayList<>();
+  private String original = "";
 
-  public ProductFunc(List<Formula> contents, String original) {
+  public ProductFunc() {
+  }
+
+  private ProductFunc(List<Formula> contents, String original) {
     this.contents = contents;
     this.original = original;
   }
 
+  @Override
+  public Formula build(List<Formula> contents, String original) {
+    return new ProductFunc(contents, original);
+  }
 
   @Override
   public List<Value> evaluate() {

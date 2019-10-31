@@ -2,17 +2,15 @@ package edu.cs3500.spreadsheets.vistors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import edu.cs3500.spreadsheets.model.Formula.Formula;
 import edu.cs3500.spreadsheets.model.Formula.Reference;
 import edu.cs3500.spreadsheets.model.Formula.Value.VBoolean;
 import edu.cs3500.spreadsheets.model.Formula.Value.VDouble;
 import edu.cs3500.spreadsheets.model.Formula.Value.VString;
+import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
 import edu.cs3500.spreadsheets.model.Formula.functions.ErrorFunction;
-import edu.cs3500.spreadsheets.model.Formula.functions.LessThanFunc;
-import edu.cs3500.spreadsheets.model.Formula.functions.LowerCase;
-import edu.cs3500.spreadsheets.model.Formula.functions.ProductFunc;
-import edu.cs3500.spreadsheets.model.Formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.sexp.SList;
 import edu.cs3500.spreadsheets.sexp.Sexp;
@@ -21,9 +19,11 @@ import edu.cs3500.spreadsheets.sexp.SexpVisitor;
 public class SexpToFormula implements SexpVisitor<Formula> {
 
   private IWorksheet model;
+  private Map<String, AbstractFunction> functions;
 
-  public SexpToFormula(IWorksheet model) {
+  public SexpToFormula(IWorksheet model, Map<String, AbstractFunction> functions) {
     this.model = model;
+    this.functions = functions;
   }
 
   @Override
@@ -41,15 +41,10 @@ public class SexpToFormula implements SexpVisitor<Formula> {
     if (l.size() == 0) {
       throw new IllegalArgumentException("No function in formula expression");
     }
-   switch (l.get(0).toString().toLowerCase()) {
-     case "lowercase":
-       return new LowerCase(map(l.subList(1, l.size())), new SList(l).toString());
-     case "sum":
-       return new SumFunc(map(l.subList(1, l.size())), new SList(l).toString());
-     case "product":
-       return new ProductFunc(map(l.subList(1, l.size())), new SList(l).toString());
-     case "<":
-       return new LessThanFunc(map(l.subList(1, l.size())), new SList(l).toString());
+    String function = l.get(0).toString().toLowerCase();
+    if (functions.containsKey(function)) {
+      return functions.get(function).build(
+              map(l.subList(1, l.size())), "=" + new SList(l).toString());
     }
     return new ErrorFunction(new SList(l).toString());
   }

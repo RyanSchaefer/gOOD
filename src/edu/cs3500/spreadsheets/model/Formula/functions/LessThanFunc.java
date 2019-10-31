@@ -12,14 +12,22 @@ import edu.cs3500.spreadsheets.model.Formula.Value.Value;
  * The class which represents the less than formula. Takes in two formulas which strictly evaluate
  * down to numbers.
  */
-public class LessThanFunc implements Formula {
+public class LessThanFunc extends AbstractFunction {
 
-  private List<Formula> contents;
-  private String original;
+  private List<Formula> contents = new ArrayList<>();
+  private String original = "";
 
-  public LessThanFunc(List<Formula> contents, String original) {
+  public LessThanFunc() {
+  }
+
+  private LessThanFunc(List<Formula> contents, String original) {
     this.contents = contents;
     this.original = original;
+  }
+
+  @Override
+  public Formula build(List<Formula> contents, String original) {
+    return new LessThanFunc(contents, original);
   }
 
   @Override

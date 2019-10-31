@@ -12,14 +12,22 @@ import edu.cs3500.spreadsheets.model.Formula.Value.Value;
  * The class representing the summation function. Takes in any number of formula which evaluate to
  * anything.
  */
-public class SumFunc implements Formula {
+public class SumFunc extends AbstractFunction {
 
-  private List<Formula> contents;
-  private String original;
+  private List<Formula> contents = new ArrayList<>();
+  private String original = "";
 
-  public SumFunc (List<Formula> contents, String original) {
+  public SumFunc() {
+  }
+
+  private SumFunc(List<Formula> contents, String original) {
     this.contents = contents;
     this.original = original;
+  }
+
+  @Override
+  public Formula build(List<Formula> contents, String original) {
+    return new SumFunc(contents, original);
   }
 
   @Override

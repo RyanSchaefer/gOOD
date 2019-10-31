@@ -11,6 +11,7 @@ import java.util.Queue;
 import edu.cs3500.spreadsheets.model.Formula.Formula;
 import edu.cs3500.spreadsheets.model.Formula.Value.VString;
 import edu.cs3500.spreadsheets.model.Formula.Value.ValueHolder;
+import edu.cs3500.spreadsheets.model.Formula.functions.AbstractFunction;
 import edu.cs3500.spreadsheets.model.Formula.functions.ErrorFunction;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.Sexp;
@@ -33,7 +34,10 @@ public class BasicWorksheet implements IWorksheet {
   // builds a list of expressions that have evaluated, when a cell changes this is reset
   private Map<Coord, Formula> evalMap = new HashMap<>();
 
-  private BasicWorksheet() {
+  private Map<String, AbstractFunction> functions;
+
+  private BasicWorksheet(Map<String, AbstractFunction> functions) {
+    this.functions = functions;
   }
 
   /**
@@ -47,8 +51,8 @@ public class BasicWorksheet implements IWorksheet {
     /**
      * Return a basic worksheet builder to build with.
      */
-    public BasicWorksheetBuilder() {
-      model = new BasicWorksheet();
+    public BasicWorksheetBuilder(Map<String, AbstractFunction> functions) {
+      model = new BasicWorksheet(functions);
     }
 
     @Override
@@ -105,10 +109,10 @@ public class BasicWorksheet implements IWorksheet {
       s = s.substring(1);
       try {
         sexp = Parser.parse(s);
-        grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this)));
+        grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this, functions)));
       } catch (IllegalArgumentException e) {
         // This isn't a valid Sexp so make it an error
-        grid.put(coord, new ErrorFunction(s));
+        grid.put(coord, new ErrorFunction("=" + s));
         return;
       }
     } else {
