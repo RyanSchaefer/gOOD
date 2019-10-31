@@ -26,14 +26,6 @@ public interface IWorksheet {
   String getCellAt(int col, int row);
 
   /**
-   * Generates a list of cells that depend on the cell at the given coordinates.
-   * @param col the column of the cell, 1 indexed
-   * @param row the row of the cell, 1 indexed
-   * @return a list of cells that depend on that cell
-   */
-  Set<Coord> getDependents(int col, int row);
-
-  /**
    * Returns the final representation of the cell at the given coordinates, evaluated in the
    * context of this worksheet.
    * @param col the column of the cell, 1 index
@@ -41,7 +33,7 @@ public interface IWorksheet {
    * @return the evaluated contents as a string or null
    * @throws IllegalArgumentException there is an error preventing the cell from being evaluated
    */
-  String evaluateCellAt(int col, int row);
+  Formula evaluateCellAt(int col, int row);
 
   /**
    * Changes the cell at the given coordinates to contain the given sexp.
