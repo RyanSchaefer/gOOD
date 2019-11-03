@@ -54,7 +54,7 @@ public class Reference implements Formula {
       Matcher m = r.matcher(cells);
       m.find();
 
-      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) &&
+      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) ||
               Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
         throw new IllegalArgumentException("First cell must no smaller than the second");
       }

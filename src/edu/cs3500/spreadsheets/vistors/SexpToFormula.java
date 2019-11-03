@@ -72,7 +72,7 @@ public class SexpToFormula implements SexpVisitor<Formula> {
 
   @Override
   public Formula visitSymbol(String s) {
-    return new Reference(model,  s);
+    return new Reference(model, s);
   }
 
   @Override

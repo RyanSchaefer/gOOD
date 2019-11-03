@@ -51,4 +51,13 @@ public interface IWorksheet {
    */
   boolean documentFreeOfErrors();
 
+  /**
+   * Gets all of the cells that depend on the given cell.
+   *
+   * @param col the column of the cell
+   * @param row the row of the cell
+   * @return a list of all of the cells that depend on that cell
+   */
+  List<Coord> getDependents(int col, int row);
+
 }

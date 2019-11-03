@@ -91,11 +91,11 @@ abstract public class TestModel {
     assertEquals(5, sheet.allActiveCells().size());
 
     // confirm all cells added to spreadsheet are actually there
-    assertEquals((String.format("%f", 7.0)), sheet.getCellAt(1, 1));
-    assertEquals((String.format("%f", 8.0)), sheet.getCellAt(1, 2));
+    assertEquals("7", sheet.getCellAt(1, 1));
+    assertEquals("8", sheet.getCellAt(1, 2));
     assertEquals("true", sheet.getCellAt(1, 3));
     assertEquals("\"test\"", sheet.getCellAt(1, 4));
-    assertEquals("(SUM A1 A2)", sheet.getCellAt(2, 1));
+    assertEquals("=(SUM A1 A2)", sheet.getCellAt(2, 1));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -118,10 +118,10 @@ abstract public class TestModel {
     // If the cell at the given coordinates is null:
     assertNull(sheet.getCellAt(123, 123));
     // If the cell at the given coordinates is NOT null:
-    assertEquals(String.format("%f", 3.0), sheet.getCellAt(1, 1));
-    assertEquals(String.format("%f", 4.0), sheet.getCellAt(2, 1));
-    assertEquals(String.format("%f", 9.0), sheet.getCellAt(3, 1));
-    assertEquals(String.format("%f", 12.0), sheet.getCellAt(4, 1));
+    assertEquals("3", sheet.getCellAt(1, 1));
+    assertEquals("4", sheet.getCellAt(2, 1));
+    assertEquals("9", sheet.getCellAt(3, 1));
+    assertEquals("12", sheet.getCellAt(4, 1));
     assertEquals("=(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1, 2));
     assertEquals("=(PRODUCT (SUM D1 B1) (SUM D1 B1))", sheet.getCellAt(2, 2));
     assertEquals("=(< A3 10)", sheet.getCellAt(2, 3));
@@ -275,7 +275,7 @@ abstract public class TestModel {
   public void testNumeric() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "4");
-    assertEquals(String.format("%f", 4.0), sheet.getCellAt(1, 1));
+    assertEquals("4", sheet.getCellAt(1, 1));
     assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
   }
 

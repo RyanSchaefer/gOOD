@@ -26,7 +26,7 @@ import edu.cs3500.spreadsheets.vistors.SexpToValue;
 public class BasicWorksheet implements IWorksheet {
 
   // a list of coordinates to Sexp
-  private Map<Coord, Formula> grid = new HashMap<>();
+  private Map<Coord, BasicCell> grid = new HashMap<>();
 
   // a graph representing the a coordinate and which coordinates depend on that coordinate
   private Map<Coord, List<Coord>> dependencies = new HashMap<>();
@@ -113,19 +113,26 @@ public class BasicWorksheet implements IWorksheet {
       s = s.substring(1);
       try {
         sexp = Parser.parse(s);
-        grid.put(new Coord(col, row), sexp.accept(new SexpToFormula(this, s, functions)));
+        grid.put(new Coord(col, row),
+                new BasicCell(
+                        sexp.accept(new SexpToFormula(this, s, functions)),
+                        "=" + s));
         updateDependents(sexp, new Coord(col, row));
       } catch (IllegalArgumentException e) {
         // This isn't a valid Sexp so make it an error
-        grid.put(coord, new ErrorFunction("=" + s));
+        grid.put(coord, new BasicCell(new ErrorFunction("=" + s), "=" + s));
         return;
       }
     } else {
       try {
         sexp = Parser.parse(s);
-        grid.put(new Coord(col, row), sexp.accept(new SexpToValue()));
+        grid.put(new Coord(col, row), new BasicCell(
+                sexp.accept(new SexpToValue()),
+                s));
       } catch (IllegalArgumentException e) {
-        grid.put(coord, new VString(s));
+        grid.put(coord, new BasicCell(
+                new VString(s),
+                s));
         return;
       }
     }
@@ -173,14 +180,8 @@ public class BasicWorksheet implements IWorksheet {
     }
   }
 
-  /**
-   * Gets all of the cells that depend on the given cell.
-   *
-   * @param col the column of the cell
-   * @param row the row of the cell
-   * @return a list of all of the cells that depend on that cell
-   */
-  private List<Coord> getDependents(int col, int row) {
+  @Override
+  public List<Coord> getDependents(int col, int row) {
     Coord coord = new Coord(col, row);
     ArrayList<Coord> ret = new ArrayList<>();
     Queue<Coord> queue = new LinkedList<>();
