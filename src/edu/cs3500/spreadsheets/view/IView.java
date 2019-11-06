@@ -25,4 +25,8 @@ public interface IView {
    */
   void renderSpreadsheet() throws IOException;
 
+  /**
+   * Displays this view to the user.
+   */
+  void makeVisible();
 }

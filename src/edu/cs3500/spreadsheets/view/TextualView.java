@@ -29,4 +29,11 @@ public class TextualView implements IView {
       out.append(Coord.colIndexToName(c.col) + c.row + " " + model.getCellAt(c.col, c.row) + "\n");
     }
   }
+
+  @Override
+  public void makeVisible() {
+    /*
+    There is no way to make a save visible to the user.
+     */
+  }
 }

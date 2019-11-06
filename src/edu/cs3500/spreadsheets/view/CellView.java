@@ -13,18 +13,16 @@ public class CellView extends JPanel implements IView {
 
   private Coord coord;
   private Formula formula;
+  private Graphics2D drawer;
+  static final public int BORDER = 1;
+  static final public Dimension CELL_SIZE = new Dimension(60, 20);
 
   public CellView(Coord c, Formula f) {
     super();
-    this.setPreferredSize(new Dimension(50, 15));
-    TextArea t = new TextArea();
-    t.setPreferredSize(new Dimension(50, 15));
+    this.setPreferredSize(CELL_SIZE);
     // TODO: check this vs f.evaluate().toString()
-    t.setText(f.toString());
-    this.add(t);
     this.coord = c;
     this.formula = f;
-
   }
 
   @Override
@@ -33,6 +31,31 @@ public class CellView extends JPanel implements IView {
 
   @Override
   public void renderSpreadsheet() throws IOException {
+
+  }
+
+  @Override
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+
+    Graphics2D draw = (Graphics2D) g;
+
+    draw.setColor(Color.BLACK);
+    draw.fillRect(0, 0, getWidth(), getHeight());
+
+    draw.setColor(Color.white);
+    draw.fillRect(BORDER, BORDER, getWidth() - (BORDER * 2),
+            getHeight() - (BORDER * 2));
+
+    draw.setColor(Color.black);
+    if (formula != null) {
+      draw.drawString(formula.toString(), 0, getHeight() - (BORDER * 2));
+    }
+
+  }
+
+  @Override
+  public void makeVisible() {
 
   }
 }

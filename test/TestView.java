@@ -17,6 +17,7 @@ import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
 import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.view.IView;
+import edu.cs3500.spreadsheets.view.NoScrollView;
 import edu.cs3500.spreadsheets.view.TextualView;
 
 import static org.junit.Assert.assertEquals;
@@ -76,5 +77,11 @@ public class TestView {
     }
   }
 
+  @Test
+  public void testView() throws IOException {
+    IView s = new NoScrollView(model("test1.gOOD"));
+    s.makeVisible();
+    while (true) ;
+  }
 
 }
