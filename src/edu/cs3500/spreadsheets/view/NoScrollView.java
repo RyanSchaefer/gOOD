@@ -29,7 +29,6 @@ public class NoScrollView extends JFrame implements IView {
     super();
     this.model = model;
     this.setTitle("gOOD");
-    this.setLayout(new GridBagLayout());
     this.setSize(CellView.CELL_SIZE.width * 10, CellView.CELL_SIZE.height * 20);
     this.addComponentListener(new ComponentAdapter() {
       @Override
@@ -41,10 +40,8 @@ public class NoScrollView extends JFrame implements IView {
         maxHCell = (newSize.height / CellView.CELL_SIZE.height) + 1;
         maxWCell = (newSize.width / CellView.CELL_SIZE.width) + 2;
         try {
-          if (oldMaxHCell > maxHCell) {
-            //removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
-            renderSpreadsheet();
-          } else if (oldMaxWCell > maxWCell) {
+          if (oldMaxHCell != maxHCell || oldMaxWCell != maxWCell) {
+            removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
             renderSpreadsheet();
           }
         } catch (IOException ex) {
@@ -68,9 +65,8 @@ public class NoScrollView extends JFrame implements IView {
     JPanel content = new JPanel();
     content.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    for (int x = minWCell; x <= maxWCell; x++) {
-      for (int y = minHCell; y <= maxHCell; y++) {
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
+    for (int x = minWCell; x < maxWCell; x++) {
+      for (int y = minHCell; y < maxHCell; y++) {
         c.gridx = x - 1;
         c.gridy = y - 1;
         Coord coord = new Coord(x, y);
@@ -80,16 +76,13 @@ public class NoScrollView extends JFrame implements IView {
       }
     }
     JScrollPane pane = new JScrollPane(content);
-    //pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    //pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     this.setContentPane(pane);
+    this.setVisible(true);
   }
 
   private void removeCells(int oldMaxH, int newMaxH, int oldMaxW, int newMaxW) {
-    System.out.print("oldMaxH: " + oldMaxH);
-    System.out.print("newMaxH: " + newMaxH);
-    System.out.print("oldMaxW: " + oldMaxW);
-    System.out.print("newMaxW: " + newMaxW + "\n");
     for (int x = newMaxW; x > oldMaxW; x--) {
       for (int y = newMaxH; y > oldMaxH; y--) {
         Coord coord = new Coord(x, y);
