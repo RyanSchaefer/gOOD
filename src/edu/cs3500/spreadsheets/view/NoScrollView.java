@@ -36,13 +36,15 @@ public class NoScrollView extends JFrame implements IView {
       public void componentResized(ComponentEvent e) {
         int oldMaxWCell = maxWCell;
         int oldMaxHCell = maxHCell;
-        super.componentResized(e);
+        //super.componentResized(e);
         Dimension newSize = e.getComponent().getSize();
-        maxHCell = (newSize.height / CellView.CELL_SIZE.height);
-        maxWCell = (newSize.width / CellView.CELL_SIZE.width);
+        maxHCell = (newSize.height / CellView.CELL_SIZE.height) + 1;
+        maxWCell = (newSize.width / CellView.CELL_SIZE.width) + 2;
         try {
-          if (oldMaxHCell != maxHCell || oldMaxWCell != maxWCell) {
-            removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
+          if (oldMaxHCell > maxHCell) {
+            //removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
+            renderSpreadsheet();
+          } else if (oldMaxWCell > maxWCell) {
             renderSpreadsheet();
           }
         } catch (IOException ex) {
@@ -63,23 +65,33 @@ public class NoScrollView extends JFrame implements IView {
 
   @Override
   public void renderSpreadsheet() throws IOException {
+    JPanel content = new JPanel();
+    content.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    c.fill = GridBagConstraints.BOTH;
-    for (int x = minWCell; x < maxWCell; x++) {
-      for (int y = minHCell; y < maxHCell; y++) {
+    for (int x = minWCell; x <= maxWCell; x++) {
+      for (int y = minHCell; y <= maxHCell; y++) {
+        c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.gridx = x - 1;
         c.gridy = y - 1;
         Coord coord = new Coord(x, y);
         CellView view = new CellView(coord, model.evaluateCellAt(x, y));
-        this.add(view, c);
+        content.add(view, c);
         cells.put(coord, view);
       }
     }
+    JScrollPane pane = new JScrollPane(content);
+    //pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    //pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    this.setContentPane(pane);
   }
 
   private void removeCells(int oldMaxH, int newMaxH, int oldMaxW, int newMaxW) {
-    for (int x = minWCell; x < oldMaxW; x++) {
-      for (int y = minHCell; y < newMaxH; y++) {
+    System.out.print("oldMaxH: " + oldMaxH);
+    System.out.print("newMaxH: " + newMaxH);
+    System.out.print("oldMaxW: " + oldMaxW);
+    System.out.print("newMaxW: " + newMaxW + "\n");
+    for (int x = newMaxW; x > oldMaxW; x--) {
+      for (int y = newMaxH; y > oldMaxH; y--) {
         Coord coord = new Coord(x, y);
         if (cells.containsKey(coord)) {
           this.remove(cells.get(coord));
@@ -87,8 +99,8 @@ public class NoScrollView extends JFrame implements IView {
         }
       }
     }
-    for (int y = minHCell; y < oldMaxH; y++) {
-      for (int x = minWCell; x < oldMaxW; x++) {
+    for (int y = newMaxH; y > oldMaxH; y--) {
+      for (int x = newMaxW; x > oldMaxW; x--) {
         Coord coord = new Coord(x, y);
         if (cells.containsKey(coord)) {
           this.remove(cells.get(coord));
