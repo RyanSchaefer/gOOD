@@ -13,21 +13,24 @@ public class ColumnHeaders extends JPanel {
     super();
     this.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
+    c.gridy = 0;
+    c.gridx = 0;
+    this.add(new ColumnHeader(null), c);
     for (int i = 0; i < (end - start); i++) {
       c.gridy = 0;
-      c.gridx = i;
+      c.gridx = i + 1;
       this.add(new ColumnHeader(start + i), c);
     }
     this.setPreferredSize(new Dimension(
-            CellView.CELL_SIZE.width * (start - end),
+            CellView.CELL_SIZE.width * ((start - end) + 1),
             CellView.CELL_SIZE.height));
   }
 
   public class ColumnHeader extends JPanel {
-    int col;
+    Integer col;
 
 
-    ColumnHeader(int col) {
+    ColumnHeader(Integer col) {
       super();
       this.col = col;
       this.setPreferredSize(CellView.CELL_SIZE);
@@ -40,7 +43,9 @@ public class ColumnHeaders extends JPanel {
       draw.setColor(Color.lightGray);
       draw.fillRect(0, 0, getWidth(), getHeight());
       draw.setColor(Color.black);
-      draw.drawString(Coord.colIndexToName(col), getWidth() / 2, getHeight() / 2);
+      if (col != null) {
+        draw.drawString(Coord.colIndexToName(col), getWidth() / 2, getHeight() / 2);
+      }
     }
   }
 }

@@ -87,12 +87,12 @@ public class NoScrollView extends JFrame implements IView {
   }
 
   private void drawColumns(GridBagConstraints c, JPanel content) {
-    c.gridx = 1;
+    c.gridx = 0;
     c.gridy = 0;
     c.gridwidth = maxWCell - minWCell + 1;
     c.gridheight = 1;
     JPanel j = new ColumnHeaders(minWCell, maxWCell);
-    j.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * (maxWCell - minWCell),
+    j.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * ((maxWCell - minWCell) + 1),
             CellView.CELL_SIZE.height));
     content.add(j, c);
   }
