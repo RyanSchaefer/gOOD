@@ -20,10 +20,10 @@ public class NoScrollView extends JFrame implements IView {
 
   Map<Coord, CellView> cells = new HashMap<>();
 
-  private int minWCell = 1;
-  private int maxWCell = 10;
-  private int minHCell = 1;
-  private int maxHCell = 20;
+  private int minWCell = 549;
+  private int maxWCell = 550;
+  private int minHCell = 100;
+  private int maxHCell = 150;
 
   public NoScrollView(IWorksheet model) throws IOException {
     super();
@@ -65,8 +65,8 @@ public class NoScrollView extends JFrame implements IView {
     JPanel content = new JPanel();
     content.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    for (int x = 0; x <= (maxWCell - minWCell); x++) {
-      for (int y = 0; y <= (maxHCell - minHCell); y++) {
+    for (int x = 0; x < (maxWCell - minWCell); x++) {
+      for (int y = 0; y < (maxHCell - minHCell); y++) {
         c.gridx = x + 1;
         c.gridy = y + 1;
         Coord coord = new Coord(minWCell + x, minHCell + y);
@@ -77,20 +77,34 @@ public class NoScrollView extends JFrame implements IView {
       }
     }
     drawColumns(c, content);
+    drawRows(c, content);
     JScrollPane pane = new JScrollPane(content);
-    pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+    pane.setLayout(new ScrollPaneLayout());
+    //pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    //pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     this.setContentPane(pane);
     this.setVisible(true);
   }
 
   private void drawColumns(GridBagConstraints c, JPanel content) {
+    c.gridx = 1;
     c.gridy = 0;
-    c.gridx = 0;
     c.gridwidth = maxWCell - minWCell + 1;
+    c.gridheight = 1;
     JPanel j = new ColumnHeaders(minWCell, maxWCell);
     j.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * (maxWCell - minWCell),
             CellView.CELL_SIZE.height));
+    content.add(j, c);
+  }
+
+  private void drawRows(GridBagConstraints c, JPanel content) {
+    c.gridx = 0;
+    c.gridy = 1;
+    c.gridheight = maxHCell - minHCell + 1;
+    c.gridwidth = 1;
+    JPanel j = new RowHeaders(minHCell, maxHCell);
+    j.setPreferredSize(new Dimension(CellView.CELL_SIZE.width,
+            CellView.CELL_SIZE.height * (maxHCell - minHCell)));
     content.add(j, c);
   }
 
