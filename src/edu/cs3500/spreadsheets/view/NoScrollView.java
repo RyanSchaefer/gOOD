@@ -29,7 +29,8 @@ public class NoScrollView extends JFrame implements IView {
     super();
     this.model = model;
     this.setTitle("gOOD");
-    this.setSize(CellView.CELL_SIZE.width * 10, CellView.CELL_SIZE.height * 20);
+    this.setSize(CellView.CELL_SIZE.width * (maxWCell - minWCell),
+            CellView.CELL_SIZE.height * (maxHCell - minHCell));
     this.addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
@@ -37,8 +38,8 @@ public class NoScrollView extends JFrame implements IView {
         int oldMaxHCell = maxHCell;
         //super.componentResized(e);
         Dimension newSize = e.getComponent().getSize();
-        maxHCell = (newSize.height / CellView.CELL_SIZE.height) + 1;
-        maxWCell = (newSize.width / CellView.CELL_SIZE.width) + 2;
+        maxHCell = minHCell + (newSize.height / CellView.CELL_SIZE.height) + 1;
+        maxWCell = minWCell + (newSize.width / CellView.CELL_SIZE.width) + 2;
         try {
           if (oldMaxHCell != maxHCell || oldMaxWCell != maxWCell) {
             removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
@@ -50,7 +51,6 @@ public class NoScrollView extends JFrame implements IView {
       }
     });
     renderSpreadsheet();
-    this.pack();
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
@@ -65,21 +65,33 @@ public class NoScrollView extends JFrame implements IView {
     JPanel content = new JPanel();
     content.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    for (int x = minWCell; x < maxWCell; x++) {
-      for (int y = minHCell; y < maxHCell; y++) {
-        c.gridx = x - 1;
-        c.gridy = y - 1;
-        Coord coord = new Coord(x, y);
-        CellView view = new CellView(coord, model.evaluateCellAt(x, y));
+    for (int x = 0; x <= (maxWCell - minWCell); x++) {
+      for (int y = 0; y <= (maxHCell - minHCell); y++) {
+        c.gridx = x + 1;
+        c.gridy = y + 1;
+        Coord coord = new Coord(minWCell + x, minHCell + y);
+        CellView view = new CellView(coord, model.evaluateCellAt(minWCell + x,
+                minHCell + y));
         content.add(view, c);
         cells.put(coord, view);
       }
     }
+    drawColumns(c, content);
     JScrollPane pane = new JScrollPane(content);
     pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     this.setContentPane(pane);
     this.setVisible(true);
+  }
+
+  private void drawColumns(GridBagConstraints c, JPanel content) {
+    c.gridy = 0;
+    c.gridx = 0;
+    c.gridwidth = maxWCell - minWCell + 1;
+    JPanel j = new ColumnHeaders(minWCell, maxWCell);
+    j.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * (maxWCell - minWCell),
+            CellView.CELL_SIZE.height));
+    content.add(j, c);
   }
 
   private void removeCells(int oldMaxH, int newMaxH, int oldMaxW, int newMaxW) {
