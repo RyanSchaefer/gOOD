@@ -1,37 +1,28 @@
 package edu.cs3500.spreadsheets.view;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.List;
 
 import javax.swing.*;
 
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
-public class CellView extends JPanel implements IView {
+public class CellView extends JPanel {
 
   private Coord coord;
   private Formula formula;
   private Graphics2D drawer;
   static final public int BORDER = 1;
   static final public Dimension CELL_SIZE = new Dimension(60, 20);
+  private boolean active;
 
-  public CellView(Coord c, Formula f) {
+  public CellView(Coord c, Formula f, boolean active) {
     super();
     this.setPreferredSize(CELL_SIZE);
     // TODO: check this vs f.evaluate().toString()
     this.coord = c;
     this.formula = f;
-  }
-
-  @Override
-  public void renderChanges(List<Coord> cells) throws IOException {
-  }
-
-  @Override
-  public void renderSpreadsheet() throws IOException {
-
+    this.active = active;
   }
 
   @Override
@@ -40,10 +31,18 @@ public class CellView extends JPanel implements IView {
 
     Graphics2D draw = (Graphics2D) g;
 
-    draw.setColor(Color.BLACK);
+    if (this.active) {
+      draw.setColor(Color.blue);
+    } else {
+      draw.setColor(Color.BLACK);
+    }
     draw.fillRect(0, 0, getWidth(), getHeight());
 
-    draw.setColor(Color.white);
+    if (this.active) {
+      draw.setColor(new Color(187, 194, 196));
+    } else {
+      draw.setColor(Color.white);
+    }
     draw.fillRect(BORDER, BORDER, getWidth() - (BORDER * 2),
             getHeight() - (BORDER * 2));
 
@@ -51,11 +50,6 @@ public class CellView extends JPanel implements IView {
     if (formula != null) {
       draw.drawString(formula.toString(), 0, getHeight() - (BORDER * 2));
     }
-
-  }
-
-  @Override
-  public void makeVisible() {
 
   }
 }

@@ -4,17 +4,19 @@ import java.awt.*;
 
 import javax.swing.*;
 
-public class RowHeaders extends JPanel {
+class RowHeaders extends JPanel {
 
 
   RowHeaders(int start, int end) {
     super();
     this.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
+    int last = 0;
     for (int i = 0; i < (end - start); i++) {
       c.gridy = i;
       c.gridx = 0;
       this.add(new RowHeader(start + i), c);
+      last = i;
     }
     this.setPreferredSize(new Dimension(
             CellView.CELL_SIZE.width,
@@ -38,7 +40,7 @@ public class RowHeaders extends JPanel {
       draw.setColor(Color.lightGray);
       draw.fillRect(0, 0, getWidth(), getHeight());
       draw.setColor(Color.black);
-      draw.drawString(row.toString(), getWidth() / 2, getHeight() / 2);
+      draw.drawString(row.toString(), getWidth() / 2, (getHeight() / 2) + 5);
     }
   }
 }

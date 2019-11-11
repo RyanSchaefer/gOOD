@@ -1,8 +1,8 @@
 package edu.cs3500.spreadsheets.view;
 
 import java.io.IOException;
-import java.util.List;
 
+import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 
@@ -17,13 +17,6 @@ public class TextualView implements IView {
   }
 
   @Override
-  public void renderChanges(List<Coord> cells) throws IOException {
-    /*
-    Since textual views save the state once, they do not support rendering changes.
-     */
-  }
-
-  @Override
   public void renderSpreadsheet() throws IOException {
     for (Coord c : model.allActiveCells()) {
       out.append(Coord.colIndexToName(c.col) + c.row + " " + model.getCellAt(c.col, c.row) + "\n");
@@ -34,6 +27,13 @@ public class TextualView implements IView {
   public void makeVisible() {
     /*
     There is no way to make a save visible to the user.
+     */
+  }
+
+  @Override
+  public void addFeatures(Features f) {
+    /*
+    No one is listening.
      */
   }
 }

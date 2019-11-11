@@ -6,29 +6,25 @@ import javax.swing.*;
 
 import edu.cs3500.spreadsheets.model.Coord;
 
-public class ColumnHeaders extends JPanel {
+class ColumnHeaders extends JPanel {
 
 
   ColumnHeaders(int start, int end) {
     super();
     this.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    c.gridy = 0;
-    c.gridx = 0;
-    this.add(new ColumnHeader(null), c);
-    for (int i = 0; i < (end - start); i++) {
+    for (int i = 0; i <= (end - start); i++) {
       c.gridy = 0;
-      c.gridx = i + 1;
+      c.gridx = i;
       this.add(new ColumnHeader(start + i), c);
     }
     this.setPreferredSize(new Dimension(
-            CellView.CELL_SIZE.width * ((start - end) + 1),
+            CellView.CELL_SIZE.width * ((start - end)),
             CellView.CELL_SIZE.height));
   }
 
-  public class ColumnHeader extends JPanel {
+  private class ColumnHeader extends JPanel {
     Integer col;
-
 
     ColumnHeader(Integer col) {
       super();
