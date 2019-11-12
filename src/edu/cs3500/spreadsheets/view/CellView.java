@@ -7,6 +7,9 @@ import javax.swing.*;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
+/**
+ * A View of one cell.
+ */
 public class CellView extends JPanel {
 
   private Coord coord;

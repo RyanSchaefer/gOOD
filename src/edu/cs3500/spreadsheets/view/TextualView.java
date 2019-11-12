@@ -6,6 +6,9 @@ import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 
+/**
+ * Allows the spreadsheet to be saved to a file.
+ */
 public class TextualView implements IView {
 
   private IWorksheet model;

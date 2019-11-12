@@ -6,6 +6,10 @@ import javax.swing.*;
 
 import edu.cs3500.spreadsheets.model.Coord;
 
+/**
+ * The column headers to be drawn. They are drawn so that they cover the range of cells that are
+ * visible. They go from A to infinity.
+ */
 class ColumnHeaders extends JPanel {
 
 
@@ -23,6 +27,9 @@ class ColumnHeaders extends JPanel {
             CellView.CELL_SIZE.height));
   }
 
+  /**
+   * One column header with coordinate A - infinity.
+   */
   private class ColumnHeader extends JPanel {
     Integer col;
 

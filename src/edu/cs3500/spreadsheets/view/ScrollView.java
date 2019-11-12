@@ -16,7 +16,7 @@ import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 
-public class NoScrollView extends JFrame implements IView {
+public class ScrollView extends JFrame implements IView {
 
   private IWorksheet model;
   private Features features;
@@ -32,7 +32,7 @@ public class NoScrollView extends JFrame implements IView {
 
   private JScrollPane scrollPane;
 
-  public NoScrollView(IWorksheet model) {
+  public ScrollView(IWorksheet model) {
     super();
     this.model = model;
     this.setTitle("gOOD");
@@ -80,17 +80,21 @@ public class NoScrollView extends JFrame implements IView {
         c.gridx = x + 1;
         c.gridy = y + 1;
         Coord coord = new Coord(minWCell + x, minHCell + y);
-        CellView view = new CellView(coord, model.evaluateCellAt(minWCell + x,
-                minHCell + y), coord.equals(this.activeCell));
-        view.addMouseListener(new MouseAdapter() {
+        if (!cells.containsKey(coord)) {
+          CellView view = new CellView(coord, model.evaluateCellAt(minWCell + x,
+                  minHCell + y), coord.equals(this.activeCell));
+          cells.put(coord, view);
+        }
+        cells.get(coord).addMouseListener(new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-            NoScrollView.this.makeCellActive(coord);
-            NoScrollView.this.renderSpreadsheet();
+            ScrollView.this.cells.remove(ScrollView.this.activeCell);
+            ScrollView.this.cells.remove(coord);
+            ScrollView.this.makeCellActive(coord);
+            ScrollView.this.renderSpreadsheet();
           }
         });
-        content.add(view, c);
-        cells.put(coord, view);
+        content.add(cells.get(coord), c);
       }
     }
     JScrollPane pane = new JScrollPane(content);
@@ -108,6 +112,7 @@ public class NoScrollView extends JFrame implements IView {
               int max = e.getAdjustable().getMaximum();
               if ((max - current) / CellView.CELL_SIZE.width < 2) {
                 maxWCell += 1;
+                removeCells(oldMaxWCell, maxWCell, maxHCell, maxHCell);
                 renderSpreadsheet();
               }
             });
@@ -119,6 +124,7 @@ public class NoScrollView extends JFrame implements IView {
               int max = e.getAdjustable().getMaximum();
               if ((max - current) / CellView.CELL_SIZE.height < 2) {
                 maxHCell += 1;
+                removeCells(maxWCell, maxWCell, oldMaxHCell, maxHCell);
                 renderSpreadsheet();
               }
             });

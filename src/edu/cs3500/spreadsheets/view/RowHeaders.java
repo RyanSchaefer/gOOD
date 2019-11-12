@@ -4,8 +4,11 @@ import java.awt.*;
 
 import javax.swing.*;
 
+/**
+ * The row headers to be drawn. They are drawn so that they cover the range of cells that are
+ * visible. They go from 1 to infinity.
+ */
 class RowHeaders extends JPanel {
-
 
   RowHeaders(int start, int end) {
     super();
@@ -23,7 +26,10 @@ class RowHeaders extends JPanel {
             CellView.CELL_SIZE.height * (start - end)));
   }
 
-  public class RowHeader extends JPanel {
+  /**
+   * One row header from 1 - infinity.
+   */
+  private class RowHeader extends JPanel {
     Integer row;
 
 
