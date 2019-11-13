@@ -17,7 +17,6 @@ import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
 import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.view.IView;
-import edu.cs3500.spreadsheets.view.ScrollView;
 import edu.cs3500.spreadsheets.view.TextualView;
 
 import static org.junit.Assert.assertEquals;
@@ -75,13 +74,6 @@ public class TestView {
     for (Coord c : model2.allActiveCells()) {
       assertEquals(model.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
     }
-  }
-
-  @Test
-  public void testView() throws IOException {
-    IView s = new ScrollView(model("test1.gOOD"));
-    s.makeVisible();
-    while (true) ;
   }
 
 }

@@ -2,6 +2,7 @@ package edu.cs3500.spreadsheets;
 
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -17,6 +18,8 @@ import edu.cs3500.spreadsheets.model.formula.functions.LessThanFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
 import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
+import edu.cs3500.spreadsheets.view.ScrollView;
+import edu.cs3500.spreadsheets.view.TextualView;
 
 /**
  * The main class for our program.
@@ -68,6 +71,32 @@ public class BeyondGood {
       } catch (IOException e) {
         System.out.print("Error reading file.");
       }
+    } else if (args[0].equals("-in") && args[2].equals("-save") &&
+            args[3].matches(".+\\.gOOD")) {
+      try {
+        IWorksheet model = WorksheetReader.read(
+                new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+                new FileReader(args[1]));
+        PrintWriter writer = new PrintWriter(args[3]);
+        new TextualView(model, writer).renderSpreadsheet();
+        writer.close();
+      } catch (IOException e) {
+        System.out.println("Error reading file.");
+      }
+    } else if (args[0].equals("-in") &&
+            args[2].equals("-gui")) {
+      try {
+        IWorksheet model = WorksheetReader.read(
+                new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+                new FileReader(args[1]));
+        new ScrollView(model).makeVisible();
+      } catch (IOException e) {
+        System.out.println("Error reading file.");
+      }
+    } else if (args[0].equals("-gui")) {
+      IWorksheet model = new BasicWorksheet
+              .BasicWorksheetBuilder(functionsSupported).createWorksheet();
+      new ScrollView(model).makeVisible();
     } else {
       System.out.print("Malformed comamand-line input.");
     }

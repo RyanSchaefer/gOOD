@@ -1,0 +1,24 @@
+B1 4
+B2 =B2
+B3 5
+B4 =(SUM B1 B2)
+
+A1 2
+A2 3
+A3 =(sum A1:A2)
+A4 =(sum A1:A3)
+A5 =(sum A1:A4)
+A6 =(sum A1:A5)
+A7 =(sum A1:A6)
+A8 =(sum A1:A7)
+A9 =(sum A1:A8)
+A10 =(sum A1:A9)
+A11 =(sum A1:A10)
+A12 =(sum A1:A11)
+A13 =(sum A1:A12)
+A14 =(sum A1:A13)
+A15 =(sum A1:A14)
+A16 =(sum A1:A15)
+A17 =(sum A1:A16)
+A18 =(sum A1:A17)
+A19 =(sum 4 5)
