@@ -4,6 +4,9 @@ import java.util.List;
 
 import edu.cs3500.spreadsheets.model.formula.value.Value;
 
+/**
+ * Represents a cell within the spreadsheet that can be evaluated.
+ */
 public interface ICell {
 
   /**

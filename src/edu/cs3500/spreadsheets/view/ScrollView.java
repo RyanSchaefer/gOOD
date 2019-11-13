@@ -1,6 +1,9 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -8,13 +11,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
-
 import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
+import javax.swing.BoxLayout;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
+import javax.swing.ScrollPaneLayout;
 
+/**
+ * Represents a scrollable view for the spreadsheet.
+ */
 public class ScrollView extends JFrame implements IView {
 
   private IWorksheet model;
@@ -30,6 +44,10 @@ public class ScrollView extends JFrame implements IView {
   private JScrollPane scrollPane;
   private Point lastP = new Point(0, 0);
 
+  /**
+   * Represents a scrollable view for the spreadsheet that only displays the cells that are within
+   * the window, or right next to the window borders.
+   */
   public ScrollView(IWorksheet model) {
     super();
     this.model = model;

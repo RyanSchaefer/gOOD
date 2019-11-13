@@ -1,24 +1,30 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
-
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
+/**
+ * Represents a cell with an error in it.
+ */
 public class ErrorCell extends CellView {
 
-  private Coord coord;
   private Formula formula;
   private Graphics2D drawer;
-  static final public int BORDER = 1;
-  static final public Dimension CELL_SIZE = new Dimension(60, 20);
+  private static final int BORDER = 1;
+  private static final Dimension CELL_SIZE = new Dimension(60, 20);
   private boolean active;
 
-  public ErrorCell(Coord c, Formula f, boolean active) {
+  /**
+   * Represents a cell with an error in it to distinguish between valid and invalid cells.
+   */
+  ErrorCell(Coord c, Formula f, boolean active) {
     super(c, f, active);
     this.setPreferredSize(CELL_SIZE);
     // TODO: check this vs f.evaluate().toString()
-    this.coord = c;
     this.formula = f;
     this.active = active;
   }

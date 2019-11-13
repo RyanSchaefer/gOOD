@@ -4,9 +4,13 @@ import java.util.List;
 
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
+/**
+ * A basic slim worksheet implementing the SlimWorksheet interface and allowing for expressions at
+ * locations.
+ */
 public class BasicSlimWorksheet implements SlimWorksheet {
 
-  IWorksheet worksheet;
+  private IWorksheet worksheet;
 
   public BasicSlimWorksheet(IWorksheet worksheet) {
     this.worksheet = worksheet;

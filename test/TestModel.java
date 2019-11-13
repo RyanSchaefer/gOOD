@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * The tests for the model we are implementing.
  */
-abstract public class TestModel {
+  public abstract class TestModel {
 
   abstract IWorksheet model(String file);
 
@@ -33,7 +33,7 @@ abstract public class TestModel {
   /**
    * Tests with a basic model.
    */
-  static public class TestWithBasic extends TestModel {
+  public static class TestWithBasic extends TestModel {
 
     Map<String, IFunction> functionsSupported = new HashMap<>();
 
@@ -48,8 +48,8 @@ abstract public class TestModel {
     IWorksheet model(String file) {
       setupFunctions();
       try {
-        return WorksheetReader.
-                read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+        return WorksheetReader
+                .read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
                         new FileReader(new File("test/" + file)));
 
       } catch (IOException e) {

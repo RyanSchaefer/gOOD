@@ -1,8 +1,13 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.JPanel;
 
 /**
  * The row headers to be drawn. They are drawn so that they cover the range of cells that are
@@ -14,12 +19,10 @@ class RowHeaders extends JPanel {
     super();
     this.setLayout(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
-    int last = 0;
     for (int i = 0; i < (end - start); i++) {
       c.gridy = i;
       c.gridx = 0;
       this.add(new RowHeader(start + i), c);
-      last = i;
     }
     this.setPreferredSize(new Dimension(
             CellView.CELL_SIZE.width,

@@ -45,17 +45,17 @@ public class Reference implements Formula {
 
       Pattern r = Pattern.compile("^([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(cells);
-      m.find();
+      //m.find();
       ret.add(new Coord(
               Coord.colNameToIndex(m.group(1)), Integer.parseInt(m.group(2))));
     } else if (cells.matches("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$")) {
 
       Pattern r = Pattern.compile("^([A-Z]+)([0-9]+):([A-Z]+)([0-9]+)$");
       Matcher m = r.matcher(cells);
-      m.find();
+      //m.find();
 
-      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3)) ||
-              Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
+      if (Coord.colNameToIndex(m.group(1)) > Coord.colNameToIndex(m.group(3))
+              || Integer.parseInt(m.group(2)) > Integer.parseInt(m.group(4))) {
         throw new IllegalArgumentException("First cell must no smaller than the second");
       }
 

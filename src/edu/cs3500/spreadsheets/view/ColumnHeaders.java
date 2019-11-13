@@ -1,8 +1,12 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
-
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import javax.swing.JPanel;
 
 import edu.cs3500.spreadsheets.model.Coord;
 

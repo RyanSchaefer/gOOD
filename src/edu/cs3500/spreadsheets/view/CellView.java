@@ -1,8 +1,10 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
-
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JPanel;
 
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
@@ -12,18 +14,21 @@ import edu.cs3500.spreadsheets.model.formula.Formula;
  */
 public class CellView extends JPanel {
 
-  private Coord coord;
   private Formula formula;
   private Graphics2D drawer;
-  static final public int BORDER = 1;
-  static final public Dimension CELL_SIZE = new Dimension(60, 20);
+  private static final int BORDER = 1;
+  static final Dimension CELL_SIZE = new Dimension(60, 20);
   private boolean active;
 
-  public CellView(Coord c, Formula f, boolean active) {
+  /**
+   * Represents the view of a single cell.
+   * @param c the coordinate position of the cell
+   * @param f the formula to be evaluated
+   * @param active whether the cell is active (is it currently selected)
+   */
+  CellView(Coord c, Formula f, boolean active) {
     super();
     this.setPreferredSize(CELL_SIZE);
-    // TODO: check this vs f.evaluate().toString()
-    this.coord = c;
     this.formula = f;
     this.active = active;
   }

@@ -30,5 +30,5 @@ environment, everything is essentially a function which evaluates to the value o
 
 Visitors
 - SexpToFormula - turns this Sexp into a Formula
-- SexpToValue - this this Sexp into a Value (if it looks like a function, turn it into a string).
+- SexpToValue - this Sexp into a Value (if it looks like a function, turn it into a string).
 - DependencyVisitor - get the dependencies in this Sexp.

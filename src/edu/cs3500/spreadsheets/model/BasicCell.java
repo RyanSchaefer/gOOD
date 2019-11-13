@@ -5,12 +5,16 @@ import java.util.List;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
 
+/**
+ * Represents a basic cell implementing the ICell interface with a Formula within it to
+ * allow it to be evaluated, and a String to hold its original value.
+ */
 public class BasicCell implements ICell {
 
   private Formula formula;
   private String original;
 
-  public BasicCell(Formula f, String original) {
+  BasicCell(Formula f, String original) {
     this.formula = f;
     this.original = original;
   }

@@ -21,9 +21,12 @@ import edu.cs3500.spreadsheets.view.TextualView;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests to make sure the view is rendering and saving properly.
+ */
 public class TestView {
 
-  Map<String, IFunction> functionsSupported = new HashMap<>();
+  private Map<String, IFunction> functionsSupported = new HashMap<>();
 
   private void setupFunctions() {
     functionsSupported.put("lowercase", new LowerCase());
@@ -32,11 +35,11 @@ public class TestView {
     functionsSupported.put("sum", new SumFunc());
   }
 
-  IWorksheet model(String file) {
+  private IWorksheet model(String file) {
     setupFunctions();
     try {
-      return WorksheetReader.
-              read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+      return WorksheetReader
+              .read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
                       new FileReader(new File("test/" + file)));
 
     } catch (IOException e) {

@@ -4,6 +4,9 @@ import java.util.List;
 
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
+/**
+ * A worksheet that acts as a read only adapter to ensure the view does not mutate the model.
+ */
 public interface SlimWorksheet {
 
   /**
