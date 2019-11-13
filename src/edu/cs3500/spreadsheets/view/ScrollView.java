@@ -31,6 +31,7 @@ public class ScrollView extends JFrame implements IView {
   private Coord activeCell;
 
   private JScrollPane scrollPane;
+  private Point lastP = new Point(0, 0);
 
   public ScrollView(IWorksheet model) {
     super();
@@ -107,14 +108,26 @@ public class ScrollView extends JFrame implements IView {
     pane
             .getHorizontalScrollBar()
             .addAdjustmentListener(e -> {
-              int oldMaxWCell = maxWCell;
+              int oldMaxHCell = maxHCell;
               int current = this.getWidth() + e.getAdjustable().getValue();
               int max = e.getAdjustable().getMaximum();
-              if ((max - current) / CellView.CELL_SIZE.width < 2) {
+              if ((max - current) / CellView.CELL_SIZE.width < 1
+                      && lastP.x < e.getAdjustable().getValue()) {
                 maxWCell += 1;
-                removeCells(oldMaxWCell, maxWCell, maxHCell, maxHCell);
+                minWCell += 1;
+                e.getAdjustable().setValue(CellView.CELL_SIZE.width);
+                lastP.x = e.getAdjustable().getValue();
+                renderSpreadsheet();
+              } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.width < 1 &&
+                      minWCell != 1 && lastP.x > e.getAdjustable().getValue()) {
+                System.out.println("smaller");
+                maxWCell -= 1;
+                minWCell -= 1;
+                e.getAdjustable().setValue(1);
+                lastP.x = e.getAdjustable().getValue();
                 renderSpreadsheet();
               }
+              lastP.x = e.getAdjustable().getValue();
             });
     pane
             .getVerticalScrollBar()
@@ -122,11 +135,23 @@ public class ScrollView extends JFrame implements IView {
               int oldMaxHCell = maxHCell;
               int current = this.getHeight() + e.getAdjustable().getValue();
               int max = e.getAdjustable().getMaximum();
-              if ((max - current) / CellView.CELL_SIZE.height < 2) {
+              if ((max - current) / CellView.CELL_SIZE.height < 1
+                      && lastP.y < e.getAdjustable().getValue()) {
                 maxHCell += 1;
-                removeCells(maxWCell, maxWCell, oldMaxHCell, maxHCell);
+                minHCell += 1;
+                e.getAdjustable().setValue(CellView.CELL_SIZE.height);
+                lastP.y = e.getAdjustable().getValue();
+                renderSpreadsheet();
+              } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.height < 1 &&
+                      minHCell != 1 && lastP.y > e.getAdjustable().getValue()) {
+                System.out.println("smaller");
+                maxHCell -= 1;
+                minHCell -= 1;
+                e.getAdjustable().setValue(1);
+                lastP.y = e.getAdjustable().getValue();
                 renderSpreadsheet();
               }
+              lastP.y = e.getAdjustable().getValue();
             });
     pane.getViewport().setViewPosition(scrollP);
     this.setContentPane(pane);
