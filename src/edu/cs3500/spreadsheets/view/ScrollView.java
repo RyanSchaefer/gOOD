@@ -7,8 +7,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.*;
 
@@ -20,8 +18,6 @@ public class ScrollView extends JFrame implements IView {
 
   private IWorksheet model;
   private Features features;
-
-  private Map<Coord, CellView> cells = new HashMap<>();
 
   private int minWCell = 1;
   private int maxWCell = 10;
@@ -51,12 +47,10 @@ public class ScrollView extends JFrame implements IView {
       public void componentResized(ComponentEvent e) {
         int oldMaxWCell = maxWCell;
         int oldMaxHCell = maxHCell;
-        //super.componentResized(e);
         Dimension newSize = e.getComponent().getSize();
         maxHCell = minHCell + (newSize.height / CellView.CELL_SIZE.height) + 2;
         maxWCell = minWCell + (newSize.width / CellView.CELL_SIZE.width) + 2;
         if (oldMaxHCell != maxHCell || oldMaxWCell != maxWCell) {
-          removeCells(oldMaxHCell, maxHCell, oldMaxWCell, maxWCell);
           renderSpreadsheet();
         }
       }
@@ -81,21 +75,16 @@ public class ScrollView extends JFrame implements IView {
         c.gridx = x + 1;
         c.gridy = y + 1;
         Coord coord = new Coord(minWCell + x, minHCell + y);
-        if (!cells.containsKey(coord)) {
-          CellView view = new CellView(coord, model.evaluateCellAt(minWCell + x,
+        CellView view = new CellView(coord, model.evaluateCellAt(minWCell + x,
                   minHCell + y), coord.equals(this.activeCell));
-          cells.put(coord, view);
-        }
-        cells.get(coord).addMouseListener(new MouseAdapter() {
+        view.addMouseListener(new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-            ScrollView.this.cells.remove(ScrollView.this.activeCell);
-            ScrollView.this.cells.remove(coord);
             ScrollView.this.makeCellActive(coord);
             ScrollView.this.renderSpreadsheet();
           }
         });
-        content.add(cells.get(coord), c);
+        content.add(view, c);
       }
     }
     JScrollPane pane = new JScrollPane(content);
@@ -103,8 +92,6 @@ public class ScrollView extends JFrame implements IView {
     pane.setLayout(new ScrollPaneLayout());
     drawColumns(pane);
     drawRows(pane);
-    //pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    //pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
     pane
             .getHorizontalScrollBar()
             .addAdjustmentListener(e -> {
@@ -120,7 +107,6 @@ public class ScrollView extends JFrame implements IView {
                 renderSpreadsheet();
               } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.width < 1 &&
                       minWCell != 1 && lastP.x > e.getAdjustable().getValue()) {
-                System.out.println("smaller");
                 maxWCell -= 1;
                 minWCell -= 1;
                 e.getAdjustable().setValue(1);
@@ -144,7 +130,6 @@ public class ScrollView extends JFrame implements IView {
                 renderSpreadsheet();
               } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.height < 1 &&
                       minHCell != 1 && lastP.y > e.getAdjustable().getValue()) {
-                System.out.println("smaller");
                 maxHCell -= 1;
                 minHCell -= 1;
                 e.getAdjustable().setValue(1);
@@ -191,26 +176,6 @@ public class ScrollView extends JFrame implements IView {
     content.setRowHeader(j);
   }
 
-  private void removeCells(int oldMaxH, int newMaxH, int oldMaxW, int newMaxW) {
-    for (int x = newMaxW; x > oldMaxW; x--) {
-      for (int y = newMaxH; y > oldMaxH; y--) {
-        Coord coord = new Coord(x, y);
-        if (cells.containsKey(coord)) {
-          this.remove(cells.get(coord));
-          cells.remove(coord);
-        }
-      }
-    }
-    for (int y = newMaxH; y > oldMaxH; y--) {
-      for (int x = newMaxW; x > oldMaxW; x--) {
-        Coord coord = new Coord(x, y);
-        if (cells.containsKey(coord)) {
-          this.remove(cells.get(coord));
-          cells.remove(coord);
-        }
-      }
-    }
-  }
 
   @Override
   public void makeVisible() {
