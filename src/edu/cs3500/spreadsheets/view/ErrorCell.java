@@ -1,9 +1,7 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
+
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
@@ -24,7 +22,6 @@ public class ErrorCell extends CellView {
   ErrorCell(Coord c, Formula f, boolean active) {
     super(c, f, active);
     this.setPreferredSize(CELL_SIZE);
-    // TODO: check this vs f.evaluate().toString()
     this.formula = f;
     this.active = active;
   }

@@ -25,7 +25,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * The tests for the model we are implementing.
  */
-  public abstract class TestModel {
+public abstract class TestModel {
 
   abstract IWorksheet model(String file);
 

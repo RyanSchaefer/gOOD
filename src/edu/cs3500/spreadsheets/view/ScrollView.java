@@ -1,9 +1,6 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Point;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
@@ -11,20 +8,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.*;
+
 import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
-import javax.swing.BoxLayout;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
-import javax.swing.ScrollPaneLayout;
 
 /**
  * Represents a scrollable view for the spreadsheet.
@@ -55,9 +44,27 @@ public class ScrollView extends JFrame implements IView {
     this.setSize(CellView.CELL_SIZE.width * (maxWCell - minWCell),
             CellView.CELL_SIZE.height * (maxHCell - minHCell));
     JMenuBar menu = new JMenuBar();
-    JMenu m1 = new JMenu("Test");
+    JMenu m1 = new JMenu("Operations");
     JMenuItem save = new JMenuItem("Save...");
+    JMenuItem load = new JMenuItem("Load...");
+    save.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (ScrollView.this.features != null) {
+          features.saveSheet();
+        }
+      }
+    });
+    load.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        if (ScrollView.this.features != null) {
+          features.saveSheet();
+        }
+      }
+    });
     m1.add(save);
+    m1.add(load);
     menu.add(m1);
     this.setJMenuBar(menu);
     menu.setVisible(true);
@@ -176,7 +183,9 @@ public class ScrollView extends JFrame implements IView {
     box.addKeyListener(new KeyAdapter() {
       @Override
       public void keyTyped(KeyEvent e) {
-        features.editCell(activeCell, e.toString());
+        if (features != null) {
+          features.editCell(activeCell, e.toString());
+        }
       }
     });
     box.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * ((maxWCell - minWCell) + 1),

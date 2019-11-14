@@ -1,3 +1,14 @@
+Assignment 6:
+Changes - Added ICell type
+IView - One of several views of the model (e.g. text / gui)
+CellView - A view of a normal cell.
+ErrorCell - A view for a cell that has an error in it (will always be unevaluated)
+ColumnHeaders - A panel that tells us which column we are in.
+RowHeader - A panel that tells us which row we are in.
+TextualView - a view which saves the spreadsheet to a file.
+ScrollView - a gui representation of the view.
+
+Assignment 5:
 Interfaces -
 - IWorksheet - An interface allowing for multiple implementations of Worksheets.
 It should allow observation about the cells as well as changes to the cells. There are also

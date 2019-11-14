@@ -79,4 +79,19 @@ public class TestView {
     }
   }
 
+  @Test
+  public void testInSameAsOutWithError() throws IOException {
+    IWorksheet model = model("test2.gOOD");
+    PrintWriter writer = new PrintWriter("test/testOut2.gOOD");
+    IView view = new TextualView(model, writer);
+    view.renderSpreadsheet();
+    writer.close();
+
+    IWorksheet model2 = model("testOut2.gOOD");
+
+    for (Coord c : model2.allActiveCells()) {
+      assertEquals(model.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
+    }
+  }
+
 }
