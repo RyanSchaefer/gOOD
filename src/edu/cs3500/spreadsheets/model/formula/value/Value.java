@@ -6,21 +6,11 @@ package edu.cs3500.spreadsheets.model.formula.value;
 public interface Value {
 
   /**
-   * Turn this Value into a String. If it cannot be turned into a String, return null.
-   *
-   * @return the Value as a String.
+   * A way for a Value to accept a visitor. By convention, if we can't convert a value to the type
+   * requested then we should return null.
+   * @param visitor what visitor we want to use
+   * @param <T> the return type
+   * @return the converted value
    */
-  String toVString();
-
-  /**
-   * Turn this Value into a Double. If it cannot be turned into a Double, return null.
-   * @return the Value as a Double.
-   */
-  Double toVDouble();
-
-  /**
-   * Turn this Value into a Boolean. If it cannot be turned into a Boolean, return null.
-   * @return the Value as a Boolean.
-   */
-  Boolean toVBoolean();
+  <T> T accept(ValueVisitor<T> visitor);
 }

@@ -1,3 +1,8 @@
+Assignment 7:
+Changes
+- added a way to easily construct new models, ModelBuilder.
+- added a way to easily add new command line arguments, CommandParser.
+- added ability to use visitors for Values.
 Assignment 6:
 Changes - Added ICell type
 IView - One of several views of the model (e.g. text / gui)

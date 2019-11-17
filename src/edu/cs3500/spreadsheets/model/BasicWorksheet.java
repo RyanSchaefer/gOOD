@@ -44,7 +44,7 @@ public class BasicWorksheet implements IWorksheet {
    * Builds a basic worksheet one cell at a time.
    */
   public static class BasicWorksheetBuilder
-          implements WorksheetReader.WorksheetBuilder<BasicWorksheet> {
+          implements WorksheetReader.WorksheetBuilder<IWorksheet> {
 
     private BasicWorksheet model;
 
@@ -56,9 +56,9 @@ public class BasicWorksheet implements IWorksheet {
     }
 
     @Override
-    public WorksheetReader.WorksheetBuilder<BasicWorksheet> createCell(int col,
-                                                                       int row,
-                                                                       String contents) {
+    public WorksheetReader.WorksheetBuilder<IWorksheet> createCell(int col,
+                                                                   int row,
+                                                                   String contents) {
       if (contents == null) {
         throw new IllegalArgumentException();
       }
