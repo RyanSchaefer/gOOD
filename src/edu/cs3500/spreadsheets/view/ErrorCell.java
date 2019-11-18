@@ -2,14 +2,18 @@ package edu.cs3500.spreadsheets.view;
 
 
 import java.awt.*;
+import java.io.IOException;
 
+import javax.swing.*;
+
+import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 
 /**
  * Represents a cell with an error in it.
  */
-public class ErrorCell extends CellView {
+public class ErrorCell extends JPanel implements IView {
 
   private Formula formula;
   private Graphics2D drawer;
@@ -18,10 +22,12 @@ public class ErrorCell extends CellView {
   private boolean active;
 
   /**
-   * Represents a cell with an error in it to distinguish between valid and invalid cells.
+   * A cell with an error in it
+   * @param c the coordinate of this cell
+   * @param f the formula causing this error
+   * @param active is this cell active?
    */
   ErrorCell(Coord c, Formula f, boolean active) {
-    super(c, f, active);
     this.setPreferredSize(CELL_SIZE);
     this.formula = f;
     this.active = active;
@@ -53,6 +59,25 @@ public class ErrorCell extends CellView {
       draw.drawString(formula.toString(), 0, getHeight() - (BORDER * 2));
     }
 
+  }
+
+  @Override
+  public void renderSpreadsheet() throws IOException {
+    /*
+    A single cell can't render a spreadsheet
+     */
+  }
+
+  @Override
+  public void makeVisible() {
+    this.setVisible(true);
+  }
+
+  @Override
+  public void addFeatures(Features f) {
+    /*
+    No one is listening.
+     */
   }
 }
 

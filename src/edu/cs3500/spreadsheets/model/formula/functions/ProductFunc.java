@@ -7,6 +7,7 @@ import java.util.List;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 import edu.cs3500.spreadsheets.model.formula.value.VDouble;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.DoubleVisitor;
 
 /**
  * The class representing the product function. Takes in any number of formula which evaluate to
@@ -37,12 +38,12 @@ public class ProductFunc implements IFunction {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     double base = 0;
     boolean allNonNumeric = true;
     for (Formula f : contents) {
-      for (Value v : f.evaluate()) {
-        Double d = v.toVDouble();
+      for (Value v : f.evaluateToList()) {
+        Double d = v.accept(new DoubleVisitor());
         if (d != null) {
           if (allNonNumeric) {
             base = 1;
@@ -53,6 +54,25 @@ public class ProductFunc implements IFunction {
       }
     }
     return new ArrayList<>(Arrays.asList(new VDouble(base)));
+  }
+
+  @Override
+  public Value evaluate() {
+    double base = 0;
+    boolean allNonNumeric = true;
+    for (Formula f : contents) {
+      for (Value v : f.evaluateToList()) {
+        Double d = v.accept(new DoubleVisitor());
+        if (d != null) {
+          if (allNonNumeric) {
+            base = 1;
+            allNonNumeric = false;
+          }
+          base *= d;
+        }
+      }
+    }
+    return new VDouble(base);
   }
 
   @Override

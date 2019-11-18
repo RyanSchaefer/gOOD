@@ -101,12 +101,13 @@ public class ScrollView extends JFrame implements IView {
         c.gridx = x + 1;
         c.gridy = y + 1;
         Coord coord = new Coord(minWCell + x, minHCell + y);
-        CellView view;
+        JPanel view;
         try {
           view = new CellView(coord, model.evaluateCellAt(minWCell + x,
                   minHCell + y), coord.equals(this.activeCell));
         } catch (IllegalArgumentException e) {
-          view = new ErrorCell(coord, new ErrorFunction(model.getCellAt(coord.col, coord.row)),
+          view = new ErrorCell(coord, new ErrorFunction(
+                  model.getCellAt(coord.col, coord.row).toString()),
                   coord.equals(this.activeCell));
         }
         view.addMouseListener(new MouseAdapter() {

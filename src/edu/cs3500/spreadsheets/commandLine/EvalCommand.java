@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
-import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.EvalPrintVisitor;
 
 /**
  * Evaluates a specific cell in a file.
@@ -34,11 +35,11 @@ public class EvalCommand implements CommandParser {
                 builder, new FileReader(args[1]));
 
         if (model.documentFreeOfErrors()) {
-          Formula eval = model.evaluateCellAt(cell.col, cell.row);
+          Value eval = model.evaluateCellAt(cell.col, cell.row);
           if (eval == null) {
             return "";
           } else {
-            return eval.toString();
+            return eval.accept(new EvalPrintVisitor());
           }
         } else {
           StringBuilder res = new StringBuilder();

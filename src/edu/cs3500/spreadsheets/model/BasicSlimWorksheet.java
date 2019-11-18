@@ -2,7 +2,7 @@ package edu.cs3500.spreadsheets.model;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A basic slim worksheet implementing the SlimWorksheet interface and allowing for expressions at
@@ -22,12 +22,12 @@ public class BasicSlimWorksheet implements SlimWorksheet {
   }
 
   @Override
-  public String getCellAt(int col, int row) throws IllegalArgumentException {
+  public ICell getCellAt(int col, int row) throws IllegalArgumentException {
     return worksheet.getCellAt(col, row);
   }
 
   @Override
-  public Formula evaluateCellAt(int col, int row) {
+  public Value evaluateCellAt(int col, int row) {
     return worksheet.evaluateCellAt(col, row);
   }
 

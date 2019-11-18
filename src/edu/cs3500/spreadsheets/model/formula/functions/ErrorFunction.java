@@ -22,7 +22,12 @@ public class ErrorFunction implements IFunction {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
+    throw new IllegalArgumentException("Error in cell");
+  }
+
+  @Override
+  public Value evaluate() {
     throw new IllegalArgumentException("Error in cell");
   }
 

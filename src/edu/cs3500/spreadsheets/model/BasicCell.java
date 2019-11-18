@@ -20,10 +20,14 @@ public class BasicCell implements ICell {
   }
 
   @Override
-  public List<Value> evaluate() {
-    return formula.evaluate();
+  public List<Value> evaluateToList() {
+    return formula.evaluateToList();
   }
 
+  @Override
+  public Value evaluate() {
+    return formula.evaluate();
+  }
 
   @Override
   public String toString() {

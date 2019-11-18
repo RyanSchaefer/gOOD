@@ -15,6 +15,13 @@ public interface Formula {
    *
    * @return a list of evaluated values.
    */
-  List<Value> evaluate();
+  List<Value> evaluateToList();
+
+  /**
+   * Evaluate this formula into a single value
+   *
+   * @return the first value in the list
+   */
+  Value evaluate();
 
 }

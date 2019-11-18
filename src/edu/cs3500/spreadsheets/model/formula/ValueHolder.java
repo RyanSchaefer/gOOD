@@ -1,9 +1,9 @@
-package edu.cs3500.spreadsheets.model.formula.value;
+package edu.cs3500.spreadsheets.model.formula;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A placeholder value used in the eval map. Evaluates to itself but to String is first in the array
@@ -18,15 +18,12 @@ public class ValueHolder implements Formula {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     return new ArrayList<>(placeholder);
   }
 
   @Override
-  public String toString() {
-    if (placeholder.size() == 0) {
-      return null;
-    }
-    return this.placeholder.get(0).toString();
+  public Value evaluate() {
+    return placeholder.get(0);
   }
 }

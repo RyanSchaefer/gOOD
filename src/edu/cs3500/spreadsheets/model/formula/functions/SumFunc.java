@@ -7,6 +7,7 @@ import java.util.List;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 import edu.cs3500.spreadsheets.model.formula.value.VDouble;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.DoubleVisitor;
 
 /**
  * The class representing the summation function. Takes in any number of formula which evaluate to
@@ -37,17 +38,31 @@ public class SumFunc implements IFunction {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     double base = 0;
     for (Formula f: contents) {
-      for (Value v: f.evaluate()) {
-        Double d = v.toVDouble();
+      for (Value v : f.evaluateToList()) {
+        Double d = v.accept(new DoubleVisitor());
         if (d != null) {
           base += d;
         }
       }
     }
     return new ArrayList<>(Arrays.asList(new VDouble(base)));
+  }
+
+  @Override
+  public Value evaluate() {
+    double base = 0;
+    for (Formula f : contents) {
+      for (Value v : f.evaluateToList()) {
+        Double d = v.accept(new DoubleVisitor());
+        if (d != null) {
+          base += d;
+        }
+      }
+    }
+    return new VDouble(base);
   }
 
   @Override

@@ -15,6 +15,7 @@ import edu.cs3500.spreadsheets.model.formula.functions.LessThanFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
 import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.EvalPrintVisitor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -91,11 +92,11 @@ public abstract class TestModel {
     assertEquals(5, sheet.allActiveCells().size());
 
     // confirm all cells added to spreadsheet are actually there
-    assertEquals("7", sheet.getCellAt(1, 1));
-    assertEquals("8", sheet.getCellAt(1, 2));
-    assertEquals("true", sheet.getCellAt(1, 3));
-    assertEquals("\"test\"", sheet.getCellAt(1, 4));
-    assertEquals("=(SUM A1 A2)", sheet.getCellAt(2, 1));
+    assertEquals("7", sheet.getCellAt(1, 1).toString());
+    assertEquals("8", sheet.getCellAt(1, 2).toString());
+    assertEquals("true", sheet.getCellAt(1, 3).toString());
+    assertEquals("\"test\"", sheet.getCellAt(1, 4).toString());
+    assertEquals("=(SUM A1 A2)", sheet.getCellAt(2, 1).toString());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -118,22 +119,24 @@ public abstract class TestModel {
     // If the cell at the given coordinates is null:
     assertNull(sheet.getCellAt(123, 123));
     // If the cell at the given coordinates is NOT null:
-    assertEquals("3", sheet.getCellAt(1, 1));
-    assertEquals("4", sheet.getCellAt(2, 1));
-    assertEquals("9", sheet.getCellAt(3, 1));
-    assertEquals("12", sheet.getCellAt(4, 1));
-    assertEquals("=(PRODUCT (SUM C1 A1) (SUM C1 A1))", sheet.getCellAt(1, 2));
-    assertEquals("=(PRODUCT (SUM D1 B1) (SUM D1 B1))", sheet.getCellAt(2, 2));
-    assertEquals("=(< A3 10)", sheet.getCellAt(2, 3));
-    assertEquals("=(LOWERCASE \"TEST\")", sheet.getCellAt(1, 4));
+    assertEquals("3", sheet.getCellAt(1, 1).toString());
+    assertEquals("4", sheet.getCellAt(2, 1).toString());
+    assertEquals("9", sheet.getCellAt(3, 1).toString());
+    assertEquals("12", sheet.getCellAt(4, 1).toString());
+    assertEquals("=(PRODUCT (SUM C1 A1) (SUM C1 A1))",
+            sheet.getCellAt(1, 2).toString());
+    assertEquals("=(PRODUCT (SUM D1 B1) (SUM D1 B1))",
+            sheet.getCellAt(2, 2).toString());
+    assertEquals("=(< A3 10)", sheet.getCellAt(2, 3).toString());
+    assertEquals("=(LOWERCASE \"TEST\")", sheet.getCellAt(1, 4).toString());
   }
 
   @Test
   public void changeCellValue() {
     IWorksheet sheet = model("test1.gOOD");
-    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
     sheet.changeCellAt(1, 1, "5");
-    assertEquals(String.format("%f", 5.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 5.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -171,33 +174,33 @@ public abstract class TestModel {
     // If the cell at the given coordinates is null:
     assertNull(null, sheet.evaluateCellAt(123, 123));
     // Evaluates cell's that are numbers
-    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).toString());
-    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1, 2).toString());
+    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1, 2).accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void evalCell2() {
     IWorksheet sheet = model("test3.gOOD");
     // Evaluates a cell that is a String
-    assertEquals("\"hello\"", sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("\"hello\"", sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a boolean
-    assertEquals("true", sheet.evaluateCellAt(1, 2).toString());
+    assertEquals("true", sheet.evaluateCellAt(1, 2).accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void evalCellWithFormulas() {
     IWorksheet sheet = model("test3.gOOD");
     // Evaluates a cell that is a SUM function
-    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(2, 4).toString());
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(2, 7).toString());
+    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(2, 4).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(2, 7).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a PRODUCT function
-    assertEquals(String.format("%f", 2.0), sheet.evaluateCellAt(2, 5).toString());
+    assertEquals(String.format("%f", 2.0), sheet.evaluateCellAt(2, 5).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a PRODUCT function with an incorrect type within it
-    assertEquals(String.format("%f", 9.0), sheet.evaluateCellAt(2, 8).toString());
+    assertEquals(String.format("%f", 9.0), sheet.evaluateCellAt(2, 8).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a < function
-    assertEquals("false", sheet.evaluateCellAt(2, 6).toString());
+    assertEquals("false", sheet.evaluateCellAt(2, 6).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a LOWERCASE function
-    assertEquals("\"test\"", sheet.evaluateCellAt(1, 5).toString());
+    assertEquals("\"test\"", sheet.evaluateCellAt(1, 5).accept(new EvalPrintVisitor()));
   }
 
   @Test
@@ -251,15 +254,17 @@ public abstract class TestModel {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(SUM)");
     sheet.changeCellAt(1, 2, "=(PRODUCT)");
-    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 1).toString());
-    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 2).toString());
+    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 0.0), sheet.evaluateCellAt(1, 2)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testFunctionRequired() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=()");
-    assertEquals("=()", sheet.getCellAt(1, 1));
+    assertEquals("=()", sheet.getCellAt(1, 1).toString());
     sheet.evaluateCellAt(1, 1);
   }
 
@@ -275,56 +280,63 @@ public abstract class TestModel {
   public void testNumeric() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "4");
-    assertEquals("4", sheet.getCellAt(1, 1));
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("4", sheet.getCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testBoolean() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "true");
-    assertEquals("true", sheet.getCellAt(1, 1));
-    assertEquals("true", sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("true", sheet.getCellAt(1, 1).toString());
+    assertEquals("true", sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testString() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "\"test\"");
-    assertEquals("\"test\"", sheet.getCellAt(1, 1));
-    assertEquals("\"test\"", sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("\"test\"", sheet.getCellAt(1, 1).toString());
+    assertEquals("\"test\"", sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testSum() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(sum 4 4)");
-    assertEquals("=(sum 4 4)", sheet.getCellAt(1, 1));
-    assertEquals(String.format("%f", 8.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("=(sum 4 4)", sheet.getCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 8.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testProduct() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(product 4 4)");
-    assertEquals("=(product 4 4)", sheet.getCellAt(1, 1));
-    assertEquals(String.format("%f", 16.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("=(product 4 4)", sheet.getCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 16.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testLessThan() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(< 3 4)");
-    assertEquals("=(< 3 4)", sheet.getCellAt(1, 1));
-    assertEquals("true", sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("=(< 3 4)", sheet.getCellAt(1, 1).toString());
+    assertEquals("true", sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void testLowerCase() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(lowercase \"TEST\")");
-    assertEquals("=(lowercase \"TEST\")", sheet.getCellAt(1, 1));
-    assertEquals("\"test\"", sheet.evaluateCellAt(1, 1).toString());
+    assertEquals("=(lowercase \"TEST\")", sheet.getCellAt(1, 1).toString());
+    assertEquals("\"test\"", sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
@@ -332,7 +344,8 @@ public abstract class TestModel {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "3");
     sheet.changeCellAt(1, 2, "=(sum A1 A1)");
-    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(1, 2).toString());
+    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(1, 2)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -345,10 +358,12 @@ public abstract class TestModel {
   @Test
   public void changingCellPropagatesChanges() {
     IWorksheet sheet = model("test2.gOOD");
-    assertEquals(String.format("%f", 163840.0), sheet.evaluateCellAt(1, 18).toString());
+    assertEquals(String.format("%f", 163840.0), sheet.evaluateCellAt(1, 18)
+            .accept(new EvalPrintVisitor()));
     sheet.changeCellAt(1, 1, "3");
     sheet.changeCellAt(1, 2, "5");
-    assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18).toString());
+    assertEquals(String.format("%f", 262144.0), sheet.evaluateCellAt(1, 18)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -362,21 +377,24 @@ public abstract class TestModel {
   public void changeTypeMismatch4() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(PRODUCT 4 true)");
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void changeTypeMismatch5() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(PRODUCT 4 true)");
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void changeTypeMismatch6() {
     IWorksheet sheet = model("empty.gOOD");
     sheet.changeCellAt(1, 1, "=(PRODUCT 4 \"test\")");
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1).toString());
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(1, 1)
+            .accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)

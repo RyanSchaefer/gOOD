@@ -2,7 +2,7 @@ package edu.cs3500.spreadsheets.model;
 
 import java.util.List;
 
-import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 
 /**
  * A worksheet that acts as a read only adapter to ensure the view does not mutate the model.
@@ -25,7 +25,7 @@ public interface SlimWorksheet {
    * @return the cell or null
    * @throws IllegalArgumentException col or row are less than 0
    */
-  String getCellAt(int col, int row) throws IllegalArgumentException;
+  ICell getCellAt(int col, int row) throws IllegalArgumentException;
 
   /**
    * Returns the final representation of the cell at the given coordinates, evaluated in the context
@@ -36,7 +36,7 @@ public interface SlimWorksheet {
    * @return the evaluated contents as a string or null
    * @throws IllegalArgumentException there is an error preventing the cell from being evaluated
    */
-  Formula evaluateCellAt(int col, int row);
+  Value evaluateCellAt(int col, int row);
 
   /**
    * Answers if the entire document is free of errors.

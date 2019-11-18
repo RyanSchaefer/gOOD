@@ -7,6 +7,7 @@ import java.util.List;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 import edu.cs3500.spreadsheets.model.formula.value.VBoolean;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.DoubleVisitor;
 
 /**
  * The class which represents the less than formula. Takes in two formulas which strictly evaluate
@@ -37,19 +38,37 @@ public class LessThanFunc implements IFunction {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     if (contents.size() == 2) {
-      List<Value> lv1 = contents.get(0).evaluate();
-      List<Value> lv2 = contents.get(1).evaluate();
+      List<Value> lv1 = contents.get(0).evaluateToList();
+      List<Value> lv2 = contents.get(1).evaluateToList();
       if (lv1.size() != 1 || lv2.size() != 1) {
         throw new IllegalArgumentException("Malformed < function.");
       }
-      Double d1 = lv1.get(0).toVDouble();
-      Double d2 = lv2.get(0).toVDouble();
+      Double d1 = lv1.get(0).accept(new DoubleVisitor());
+      Double d2 = lv2.get(0).accept(new DoubleVisitor());
       if (d1 == null || d2 == null) {
         throw new IllegalArgumentException("Malformed < function.");
       }
       return new ArrayList<>(Arrays.asList(new VBoolean(d1 < d2)));
+    }
+    throw new IllegalArgumentException("Malformed < function.");
+  }
+
+  @Override
+  public Value evaluate() {
+    if (contents.size() == 2) {
+      List<Value> lv1 = contents.get(0).evaluateToList();
+      List<Value> lv2 = contents.get(1).evaluateToList();
+      if (lv1.size() != 1 || lv2.size() != 1) {
+        throw new IllegalArgumentException("Malformed < function.");
+      }
+      Double d1 = lv1.get(0).accept(new DoubleVisitor());
+      Double d2 = lv2.get(0).accept(new DoubleVisitor());
+      if (d1 == null || d2 == null) {
+        throw new IllegalArgumentException("Malformed < function.");
+      }
+      return new VBoolean(d1 < d2);
     }
     throw new IllegalArgumentException("Malformed < function.");
   }

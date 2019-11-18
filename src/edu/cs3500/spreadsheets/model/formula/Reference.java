@@ -31,10 +31,13 @@ public class Reference implements Formula {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     List<Value> values = new ArrayList<>();
     for (Coord c: references) {
-      values.addAll(model.evaluateCellAt(c.col, c.row).evaluate());
+      if (model.getDependents(c.col, c.row).contains(c)) {
+        throw new IllegalArgumentException("Cyclical reference");
+      }
+      values.addAll(model.getCellAt(c.col, c.row).evaluateToList());
     }
     return values;
   }
@@ -67,6 +70,11 @@ public class Reference implements Formula {
       }
     }
     return ret;
+  }
+
+  @Override
+  public Value evaluate() {
+    return this.evaluateToList().get(0);
   }
 
   @Override

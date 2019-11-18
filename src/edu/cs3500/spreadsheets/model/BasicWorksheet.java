@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Queue;
 
 import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.ValueHolder;
 import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
 import edu.cs3500.spreadsheets.model.formula.functions.IFunction;
 import edu.cs3500.spreadsheets.model.formula.value.VString;
-import edu.cs3500.spreadsheets.model.formula.value.ValueHolder;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
 import edu.cs3500.spreadsheets.sexp.Parser;
 import edu.cs3500.spreadsheets.sexp.Sexp;
 import edu.cs3500.spreadsheets.vistors.DependencyVisitor;
@@ -73,17 +74,17 @@ public class BasicWorksheet implements IWorksheet {
   }
 
   @Override
-  public String getCellAt(int col, int row) {
+  public ICell getCellAt(int col, int row) {
     Coord c = new Coord(col, row);
     if (grid.get(c) == null) {
       return null;
     }
-    return grid.get(c).toString();
+    return grid.get(c);
   }
 
 
   @Override
-  public Formula evaluateCellAt(int col, int row) throws IllegalArgumentException {
+  public Value evaluateCellAt(int col, int row) throws IllegalArgumentException {
     Coord coord = new Coord(col, row);
     if (!grid.containsKey(coord)) {
       return null;
@@ -92,9 +93,9 @@ public class BasicWorksheet implements IWorksheet {
       throw new IllegalArgumentException("Cyclical reference");
     }
     if (!evalMap.containsKey(coord)) {
-      evalMap.put(coord, new ValueHolder(grid.get(coord).evaluate()));
+      evalMap.put(coord, new ValueHolder(grid.get(coord).evaluateToList()));
     }
-    return evalMap.get(coord);
+    return evalMap.get(coord).evaluate();
   }
 
   @Override
@@ -121,7 +122,6 @@ public class BasicWorksheet implements IWorksheet {
       } catch (IllegalArgumentException e) {
         // This isn't a valid Sexp so make it an error
         grid.put(coord, new BasicCell(new ErrorFunction("=" + s), "=" + s));
-        return;
       }
     } else {
       try {
@@ -133,7 +133,6 @@ public class BasicWorksheet implements IWorksheet {
         grid.put(coord, new BasicCell(
                 new VString(s),
                 s));
-        return;
       }
     }
   }

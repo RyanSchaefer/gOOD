@@ -1,20 +1,21 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import javax.swing.JPanel;
+import java.awt.*;
+import java.io.IOException;
 
+import javax.swing.*;
+
+import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
-import edu.cs3500.spreadsheets.model.formula.Formula;
+import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.GUIDisplayVisitor;
 
 /**
  * A View of one cell.
  */
-public class CellView extends JPanel {
+public class CellView extends JPanel implements IView {
 
-  private Formula formula;
+  private Value value;
   private Graphics2D drawer;
   private static final int BORDER = 1;
   static final Dimension CELL_SIZE = new Dimension(60, 20);
@@ -23,13 +24,13 @@ public class CellView extends JPanel {
   /**
    * Represents the view of a single cell.
    * @param c the coordinate position of the cell
-   * @param f the formula to be evaluated
+   * @param v the value to be evaluated
    * @param active whether the cell is active (is it currently selected)
    */
-  CellView(Coord c, Formula f, boolean active) {
+  CellView(Coord c, Value v, boolean active) {
     super();
     this.setPreferredSize(CELL_SIZE);
-    this.formula = f;
+    this.value = v;
     this.active = active;
   }
 
@@ -55,9 +56,28 @@ public class CellView extends JPanel {
             getHeight() - (BORDER * 2));
 
     draw.setColor(Color.black);
-    if (formula != null) {
-      draw.drawString(formula.toString(), 0, getHeight() - (BORDER * 2));
+    if (value != null) {
+      draw.drawString(value.accept(new GUIDisplayVisitor()), 0, getHeight() - (BORDER * 2));
     }
 
+  }
+
+  @Override
+  public void renderSpreadsheet() throws IOException {
+    /*
+    A single cell can't render the spreadsheet
+     */
+  }
+
+  @Override
+  public void makeVisible() {
+    this.setVisible(true);
+  }
+
+  @Override
+  public void addFeatures(Features f) {
+    /*
+    no features to add
+     */
   }
 }

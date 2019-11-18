@@ -7,6 +7,7 @@ import java.util.List;
 import edu.cs3500.spreadsheets.model.formula.Formula;
 import edu.cs3500.spreadsheets.model.formula.value.VString;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
+import edu.cs3500.spreadsheets.model.formula.value.visitors.StringVisitor;
 
 /**
  * The class representing the lowercase function. Takes in one formula which evaluates to a string.
@@ -36,17 +37,33 @@ public class LowerCase implements IFunction {
   }
 
   @Override
-  public List<Value> evaluate() {
+  public List<Value> evaluateToList() {
     if (this.contents.size() == 1) {
-      List<Value> v = this.contents.get(0).evaluate();
+      List<Value> v = this.contents.get(0).evaluateToList();
       if (v.size() != 1) {
         throw new IllegalArgumentException("Malformed lowercase formula: too many args.");
       }
-      String s = v.get(0).toVString();
+      String s = v.get(0).accept(new StringVisitor());
       if (s == null) {
         throw new IllegalArgumentException("Malformed lowercase formula: not a string.");
       }
       return new ArrayList<>(Arrays.asList(new VString(s.toLowerCase())));
+    }
+    throw new IllegalArgumentException("Malformed lowercase formula: too many args.");
+  }
+
+  @Override
+  public Value evaluate() {
+    if (this.contents.size() == 1) {
+      List<Value> v = this.contents.get(0).evaluateToList();
+      if (v.size() != 1) {
+        throw new IllegalArgumentException("Malformed lowercase formula: too many args.");
+      }
+      String s = v.get(0).accept(new StringVisitor());
+      if (s == null) {
+        throw new IllegalArgumentException("Malformed lowercase formula: not a string.");
+      }
+      return new VString(s.toLowerCase());
     }
     throw new IllegalArgumentException("Malformed lowercase formula: too many args.");
   }

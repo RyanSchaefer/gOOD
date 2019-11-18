@@ -14,6 +14,13 @@ public interface ICell {
    *
    * @return the evaluated formula
    */
-  List<Value> evaluate();
+  List<Value> evaluateToList();
+
+  /**
+   * Evaluate this cell.
+   *
+   * @return a single value/
+   */
+  Value evaluate();
 
 }
