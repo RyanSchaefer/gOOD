@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import edu.cs3500.spreadsheets.model.Coord;
+import edu.cs3500.spreadsheets.model.ICell;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.formula.value.Value;
 
@@ -37,7 +38,10 @@ public class Reference implements Formula {
       if (model.getDependents(c.col, c.row).contains(c)) {
         throw new IllegalArgumentException("Cyclical reference");
       }
-      values.addAll(model.getCellAt(c.col, c.row).evaluateToList());
+      ICell cell = model.getCellAt(c.col, c.row);
+      if (cell != null) {
+        values.addAll(cell.evaluateToList());
+      }
     }
     return values;
   }

@@ -3,8 +3,6 @@ package edu.cs3500.spreadsheets.view;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -21,14 +19,14 @@ import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
 public class ScrollView extends JFrame implements IView {
 
   private IWorksheet model;
-  private Features features;
+  protected Features features;
 
-  private int minWCell = 1;
-  private int maxWCell = 10;
-  private int minHCell = 1;
-  private int maxHCell = 20;
+  protected int minWCell = 1;
+  protected int maxWCell = 10;
+  protected int minHCell = 1;
+  protected int maxHCell = 20;
 
-  private Coord activeCell;
+  protected Coord activeCell;
 
   private JScrollPane scrollPane;
   private Point lastP = new Point(0, 0);
@@ -40,34 +38,9 @@ public class ScrollView extends JFrame implements IView {
   public ScrollView(IWorksheet model) {
     super();
     this.model = model;
-    this.setTitle("gOOD");
+    this.setTitle("gOOD (Read Only)");
     this.setSize(CellView.CELL_SIZE.width * (maxWCell - minWCell),
             CellView.CELL_SIZE.height * (maxHCell - minHCell));
-    JMenuBar menu = new JMenuBar();
-    JMenu m1 = new JMenu("Operations");
-    JMenuItem save = new JMenuItem("Save...");
-    JMenuItem load = new JMenuItem("Load...");
-    save.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (ScrollView.this.features != null) {
-          features.saveSheet();
-        }
-      }
-    });
-    load.addMouseListener(new MouseAdapter() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        if (ScrollView.this.features != null) {
-          features.saveSheet();
-        }
-      }
-    });
-    m1.add(save);
-    m1.add(load);
-    menu.add(m1);
-    this.setJMenuBar(menu);
-    menu.setVisible(true);
     this.addComponentListener(new ComponentAdapter() {
       @Override
       public void componentResized(ComponentEvent e) {
@@ -78,10 +51,10 @@ public class ScrollView extends JFrame implements IView {
         maxWCell = minWCell + (newSize.width / CellView.CELL_SIZE.width) + 2;
         if (oldMaxHCell != maxHCell || oldMaxWCell != maxWCell) {
           renderSpreadsheet();
+          ScrollView.this.setVisible(true);
         }
       }
     });
-    renderSpreadsheet();
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
@@ -138,6 +111,7 @@ public class ScrollView extends JFrame implements IView {
                 e.getAdjustable().setValue(CellView.CELL_SIZE.width);
                 lastP.x = e.getAdjustable().getValue();
                 renderSpreadsheet();
+                ScrollView.this.setVisible(true);
               } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.width < 1 &&
                       minWCell != 1 && lastP.x > e.getAdjustable().getValue()) {
                 maxWCell -= 1;
@@ -145,6 +119,7 @@ public class ScrollView extends JFrame implements IView {
                 e.getAdjustable().setValue(1);
                 lastP.x = e.getAdjustable().getValue();
                 renderSpreadsheet();
+                ScrollView.this.setVisible(true);
               }
               lastP.x = e.getAdjustable().getValue();
             });
@@ -161,6 +136,7 @@ public class ScrollView extends JFrame implements IView {
                 e.getAdjustable().setValue(CellView.CELL_SIZE.height);
                 lastP.y = e.getAdjustable().getValue();
                 renderSpreadsheet();
+                ScrollView.this.setVisible(true);
               } else if (e.getAdjustable().getValue() / CellView.CELL_SIZE.height < 1 &&
                       minHCell != 1 && lastP.y > e.getAdjustable().getValue()) {
                 maxHCell -= 1;
@@ -168,40 +144,23 @@ public class ScrollView extends JFrame implements IView {
                 e.getAdjustable().setValue(1);
                 lastP.y = e.getAdjustable().getValue();
                 renderSpreadsheet();
+                ScrollView.this.setVisible(true);
               }
               lastP.y = e.getAdjustable().getValue();
             });
     pane.getViewport().setViewPosition(scrollP);
     this.setContentPane(pane);
-    this.setVisible(true);
   }
 
-  private void drawColumns(JScrollPane content) {
+  protected void drawColumns(JScrollPane content) {
     JViewport j = new JViewport();
     JPanel panel = new ColumnHeaders(minWCell, maxWCell);
-    JPanel container = new JPanel();
-    JTextField box = new JTextField();
-    box.addKeyListener(new KeyAdapter() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-        if (features != null) {
-          features.editCell(activeCell, e.toString());
-        }
-      }
-    });
-    box.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * ((maxWCell - minWCell) + 1),
-            CellView.CELL_SIZE.height));
-    container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-    container.add(box);
     panel.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * ((maxWCell - minWCell) + 1),
             CellView.CELL_SIZE.height));
-    container.add(panel);
-    container.setPreferredSize(new Dimension(CellView.CELL_SIZE.width * ((maxWCell - minWCell) + 1),
-            2 * CellView.CELL_SIZE.height));
-    content.setColumnHeaderView(container);
+    content.setColumnHeaderView(panel);
   }
 
-  private void drawRows(JScrollPane content) {
+  protected void drawRows(JScrollPane content) {
     JViewport j = new JViewport();
     JPanel panel = new RowHeaders(minHCell, maxHCell);
     panel.setPreferredSize(new Dimension(CellView.CELL_SIZE.width,
@@ -214,6 +173,7 @@ public class ScrollView extends JFrame implements IView {
 
   @Override
   public void makeVisible() {
+    renderSpreadsheet();
     this.setVisible(true);
   }
 

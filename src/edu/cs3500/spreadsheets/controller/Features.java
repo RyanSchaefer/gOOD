@@ -13,7 +13,7 @@ public interface Features {
    * @param s the new desired value of the cell
    * @return The String so far
    */
-  String editCell(Coord c, String s);
+  void editCell(Coord c, String s);
 
 
   /**

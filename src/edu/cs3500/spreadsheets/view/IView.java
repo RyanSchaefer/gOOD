@@ -1,7 +1,5 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.io.IOException;
-
 import edu.cs3500.spreadsheets.controller.Features;
 
 /**
@@ -11,10 +9,8 @@ public interface IView {
 
   /**
    * Render the entire spreadsheet.
-   *
-   * @throws IOException some issue in what we are rendering to
    */
-  void renderSpreadsheet() throws IOException;
+  void renderSpreadsheet();
 
   /**
    * Displays this view to the user.

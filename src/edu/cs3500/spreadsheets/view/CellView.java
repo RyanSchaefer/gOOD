@@ -1,7 +1,6 @@
 package edu.cs3500.spreadsheets.view;
 
 import java.awt.*;
-import java.io.IOException;
 
 import javax.swing.*;
 
@@ -63,7 +62,7 @@ public class CellView extends JPanel implements IView {
   }
 
   @Override
-  public void renderSpreadsheet() throws IOException {
+  public void renderSpreadsheet() {
     /*
     A single cell can't render the spreadsheet
      */

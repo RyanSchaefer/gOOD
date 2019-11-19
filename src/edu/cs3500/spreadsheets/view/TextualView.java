@@ -20,9 +20,13 @@ public class TextualView implements IView {
   }
 
   @Override
-  public void renderSpreadsheet() throws IOException {
+  public void renderSpreadsheet() {
     for (Coord c : model.allActiveCells()) {
-      out.append(Coord.colIndexToName(c.col) + c.row + " " + model.getCellAt(c.col, c.row) + "\n");
+      try {
+        out.append(Coord.colIndexToName(c.col) + c.row + " " + model.getCellAt(c.col, c.row) + "\n");
+      } catch (IOException e) {
+        System.out.print("Couldn't render spreadsheet");
+      }
     }
   }
 
