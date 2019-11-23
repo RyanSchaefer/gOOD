@@ -4,7 +4,7 @@ import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 
 /**
- * Try on command or run the other command.
+ * Allows for Commands to be run in a chain, one after the other.
  */
 public class TryOrElse implements CommandParser {
 

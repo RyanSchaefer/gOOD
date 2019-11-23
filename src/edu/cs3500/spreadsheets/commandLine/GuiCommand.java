@@ -3,12 +3,13 @@ package edu.cs3500.spreadsheets.commandLine;
 import java.io.FileReader;
 import java.io.IOException;
 
+import edu.cs3500.spreadsheets.model.BasicSlimWorksheet;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 import edu.cs3500.spreadsheets.view.ScrollView;
 
 /**
- * Opens up the given file in a GUI.
+ * Opens up the given file in a GUI (-in [file] -gui).
  */
 public class GuiCommand implements CommandParser {
   @Override
@@ -23,7 +24,7 @@ public class GuiCommand implements CommandParser {
         IWorksheet model = WorksheetReader.read(
                 builder,
                 new FileReader(args[1]));
-        new ScrollView(model).makeVisible();
+        new ScrollView(new BasicSlimWorksheet(model)).makeVisible();
         return "View shown. \nTerminating...";
       } catch (IOException e) {
         return "Error reading file.";

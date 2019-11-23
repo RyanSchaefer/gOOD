@@ -1,13 +1,9 @@
 package edu.cs3500.spreadsheets.view;
 
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import javax.swing.JPanel;
+import java.awt.*;
+
+import javax.swing.*;
 
 /**
  * The row headers to be drawn. They are drawn so that they cover the range of cells that are
@@ -32,7 +28,7 @@ class RowHeaders extends JPanel {
   /**
    * One row header from 1 - infinity.
    */
-  private class RowHeader extends JPanel {
+  private static class RowHeader extends JPanel {
     Integer row;
 
 

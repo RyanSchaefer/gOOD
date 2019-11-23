@@ -3,9 +3,11 @@ package edu.cs3500.spreadsheets;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.cs3500.spreadsheets.commandLine.BlankEditableGUICommand;
 import edu.cs3500.spreadsheets.commandLine.BlankGuiCommand;
 import edu.cs3500.spreadsheets.commandLine.CommandParser;
 import edu.cs3500.spreadsheets.commandLine.Commands;
+import edu.cs3500.spreadsheets.commandLine.EditableGUICommand;
 import edu.cs3500.spreadsheets.commandLine.EvalCommand;
 import edu.cs3500.spreadsheets.commandLine.GuiCommand;
 import edu.cs3500.spreadsheets.commandLine.SaveCommand;
@@ -41,7 +43,10 @@ public class BeyondGood {
             .newCommand(new EvalCommand())
             .newCommand(new SaveCommand())
             .newCommand(new GuiCommand())
-            .newCommand(new BlankGuiCommand()).build();
+            .newCommand(new BlankGuiCommand())
+            .newCommand(new BlankEditableGUICommand())
+            .newCommand(new EditableGUICommand()).build();
+
 
     System.out.print(cp.parse(mb.buildModel(BasicWorksheet.class), args));
 

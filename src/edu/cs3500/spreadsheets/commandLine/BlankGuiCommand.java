@@ -1,12 +1,13 @@
 package edu.cs3500.spreadsheets.commandLine;
 
 
+import edu.cs3500.spreadsheets.model.BasicSlimWorksheet;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 import edu.cs3500.spreadsheets.view.ScrollView;
 
 /**
- * Opens a new blank GUI.
+ * Opens a new blank GUI (-gui).
  */
 public class BlankGuiCommand implements CommandParser {
   @Override
@@ -16,7 +17,7 @@ public class BlankGuiCommand implements CommandParser {
     }
     if (args[0].equals("-gui")) {
       IWorksheet model = builder.createWorksheet();
-      new ScrollView(model).makeVisible();
+      new ScrollView(new BasicSlimWorksheet(model)).makeVisible();
       return "GUI Running.\nTerminating...";
     }
     return null;

@@ -12,7 +12,7 @@ import edu.cs3500.spreadsheets.model.formula.value.Value;
 import edu.cs3500.spreadsheets.model.formula.value.visitors.EvalPrintVisitor;
 
 /**
- * Evaluates a specific cell in a file.
+ * Evaluates a specific cell in a file (-in [file] -eval [cell]).
  */
 public class EvalCommand implements CommandParser {
   @Override

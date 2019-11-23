@@ -10,7 +10,7 @@ import javax.swing.*;
 
 import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
-import edu.cs3500.spreadsheets.model.IWorksheet;
+import edu.cs3500.spreadsheets.model.SlimWorksheet;
 import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
 
 /**
@@ -18,7 +18,7 @@ import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
  */
 public class ScrollView extends JFrame implements IView {
 
-  private IWorksheet model;
+  private SlimWorksheet model;
   protected Features features;
 
   protected int minWCell = 1;
@@ -35,7 +35,7 @@ public class ScrollView extends JFrame implements IView {
    * Represents a scrollable view for the spreadsheet that only displays the cells that are within
    * the window, or right next to the window borders.
    */
-  public ScrollView(IWorksheet model) {
+  public ScrollView(SlimWorksheet model) {
     super();
     this.model = model;
     this.setTitle("gOOD (Read Only)");
@@ -86,8 +86,9 @@ public class ScrollView extends JFrame implements IView {
         view.addMouseListener(new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-            ScrollView.this.makeCellActive(coord);
-            ScrollView.this.renderSpreadsheet();
+            makeCellActive(coord);
+            renderSpreadsheet();
+            setVisible(true);
           }
         });
         content.add(view, c);

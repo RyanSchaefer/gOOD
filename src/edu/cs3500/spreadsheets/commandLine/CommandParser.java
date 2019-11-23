@@ -3,6 +3,10 @@ package edu.cs3500.spreadsheets.commandLine;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 
+/**
+ * A command that can build a worksheet should the need arise and can parse the arguments to the
+ * program.
+ */
 public interface CommandParser {
 
   /**

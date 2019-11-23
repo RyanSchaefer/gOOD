@@ -1,5 +1,8 @@
 package edu.cs3500.spreadsheets.model.formula.value.visitors;
 
+/**
+ * Formats values properly for the {@link edu.cs3500.spreadsheets.commandLine.EvalCommand}.
+ */
 public class EvalPrintVisitor implements ValueVisitor<String> {
   @Override
   public String visitBoolean(Boolean value) {

@@ -4,7 +4,7 @@ import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
 
 /**
- * A complete set of commands to run
+ * A complete set of commands to run.
  */
 public class Commands implements CommandParser {
 
@@ -22,9 +22,7 @@ public class Commands implements CommandParser {
 
     public CommandsBuilder() {
       c = (WorksheetReader.WorksheetBuilder<IWorksheet> builder,
-           String[] args) -> {
-        return "No matching command found";
-      };
+           String[] args) -> "No matching command found";
     }
 
     public CommandsBuilder newCommand(CommandParser command) {

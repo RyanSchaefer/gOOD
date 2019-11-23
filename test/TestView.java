@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.cs3500.spreadsheets.controller.SheetController;
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
@@ -17,7 +16,6 @@ import edu.cs3500.spreadsheets.model.formula.functions.LessThanFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.LowerCase;
 import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
-import edu.cs3500.spreadsheets.view.EditableView;
 import edu.cs3500.spreadsheets.view.IView;
 import edu.cs3500.spreadsheets.view.TextualView;
 
@@ -98,9 +96,6 @@ public class TestView {
 
   @Test
   public void testEdit() {
-    IWorksheet model = model("test2.gOOD");
-    new SheetController(model, new EditableView(model));
-    while (true) ;
   }
 
 }
