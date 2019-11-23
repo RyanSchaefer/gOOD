@@ -40,6 +40,12 @@ public class SheetController implements Controller {
     }
   }
 
+  /**
+   * Construct a new controller.
+   *
+   * @param model the model to control.
+   * @param view  the view to control.
+   */
   public SheetController(IWorksheet model, IView view) {
     this.model = model;
     this.view = view;
