@@ -14,7 +14,7 @@ public class BasicCell implements ICell {
   private Formula formula;
   private String original;
 
-  BasicCell(Formula f, String original) {
+  public BasicCell(Formula f, String original) {
     this.formula = f;
     this.original = original;
   }

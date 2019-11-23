@@ -33,6 +33,11 @@ public class SheetController implements Controller {
     public void loadSheet(String sheet) {
 
     }
+
+    @Override
+    public String toString() {
+      return "SheetControllerFeatures";
+    }
   }
 
   public SheetController(IWorksheet model, IView view) {
@@ -43,6 +48,7 @@ public class SheetController implements Controller {
   @Override
   public void go() {
     view.addFeatures(new SheetControllerFeatures());
+    view.renderSpreadsheet();
     view.makeVisible();
   }
 }
