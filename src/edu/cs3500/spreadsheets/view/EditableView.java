@@ -1,20 +1,15 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.Dimension;
-
-import edu.cs3500.spreadsheets.model.ICell;
-import edu.cs3500.spreadsheets.model.SlimWorksheet;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JViewport;
+
+import javax.swing.*;
+
+import edu.cs3500.spreadsheets.model.ICell;
+import edu.cs3500.spreadsheets.model.SlimWorksheet;
 
 /**
  * A {@link IView} that has the facilities for editing built into it.
@@ -63,7 +58,7 @@ public class EditableView extends ScrollView  {
       @Override
       public void keyTyped(KeyEvent e) {
         super.keyTyped(e);
-        if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+        if (e.getExtendedKeyCode() == KeyEvent.VK_BACK_SPACE) {
           if(features != null && !textBoxFocused) {
             features.deleteCellContents(activeCell);
           }
