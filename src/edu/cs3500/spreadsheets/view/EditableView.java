@@ -1,36 +1,75 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
-
-import javax.swing.*;
+import java.awt.Dimension;
 
 import edu.cs3500.spreadsheets.model.ICell;
 import edu.cs3500.spreadsheets.model.SlimWorksheet;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
 
 /**
  * A {@link IView} that has the facilities for editing built into it.
  */
-public class EditableView extends ScrollView {
+public class EditableView extends ScrollView  {
 
-  ScrollView s;
-  JTextField textBox;
-  SlimWorksheet model;
+  private JTextField textBox;
+  private SlimWorksheet model;
+  private boolean textBoxFocused;
 
+  /**
+   * Represents a spreadsheet that is editable through the implementation of features.
+   * @param model the spreadsheet model
+   */
   public EditableView(SlimWorksheet model) {
     super(model);
     this.model = model;
-    s = new ScrollView(model);
+    ScrollView s = new ScrollView(model);
     this.setTitle("gOOD");
+    this.setFocusable(true);
 
     JTextField box = new JTextField();
 
     this.textBox = new JTextField();
-    box.setPreferredSize(new Dimension(CellView.CELL_SIZE.width *
-            ((maxWCell - minWCell - 3) + 1),
-            CellView.CELL_SIZE.height));
+    box.setPreferredSize(new Dimension(CellView.CELL_SIZE.width
+        * ((maxWCell - minWCell - 3) + 1),
+        CellView.CELL_SIZE.height));
 
     this.setSize(new Dimension(s.getWidth(),
             s.getHeight()));
+
+    this.textBox.addFocusListener(new FocusListener() {
+      @Override
+      public void focusGained(FocusEvent e) {
+        textBoxFocused = true;
+      }
+
+      @Override
+      public void focusLost(FocusEvent e) {
+        EditableView.this.requestFocus();
+        textBoxFocused = false;
+      }
+    });
+
+    this.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyTyped(KeyEvent e) {
+        super.keyTyped(e);
+        if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+          if(features != null && !textBoxFocused) {
+            features.deleteCellContents(activeCell);
+          }
+        }
+      }
+    });
   }
 
   @Override
@@ -85,4 +124,5 @@ public class EditableView extends ScrollView {
       }
     }
   }
+
 }
