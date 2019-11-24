@@ -1,13 +1,15 @@
 package edu.cs3500.spreadsheets.view;
 
 
-import java.awt.*;
-
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.formula.Formula;
+import javax.swing.JPanel;
 
 /**
  * Represents a cell with an error in it.
@@ -21,7 +23,7 @@ public class ErrorCell extends JPanel implements IView {
   private boolean active;
 
   /**
-   * A cell with an error in it
+   * A cell with an error in it.
    * @param c the coordinate of this cell
    * @param f the formula causing this error
    * @param active is this cell active?

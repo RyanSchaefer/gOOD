@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.commandLine;
+package edu.cs3500.spreadsheets.commandline;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class EditableGUICommand implements CommandParser {
         IWorksheet model = WorksheetReader.read(
                 builder,
                 new FileReader(args[1]));
-        new SheetController(model, new EditableView(new BasicSlimWorksheet(model))).go();
+        new SheetController(model, new EditableView(new BasicSlimWorksheet(model))).displayView();
         return "Controller Running\nTerminating...";
       } catch (IOException e) {
         return "Error reading file.";

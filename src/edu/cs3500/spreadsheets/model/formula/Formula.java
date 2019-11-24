@@ -18,7 +18,7 @@ public interface Formula {
   List<Value> evaluateToList();
 
   /**
-   * Evaluate this formula into a single value
+   * Evaluate this formula into a single value.
    *
    * @return the first value in the list
    */

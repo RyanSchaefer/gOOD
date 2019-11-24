@@ -1,17 +1,23 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.*;
-
 import edu.cs3500.spreadsheets.controller.Features;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.SlimWorksheet;
 import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.ScrollPaneLayout;
 
 /**
  * Represents a scrollable view for the spreadsheet.
@@ -19,14 +25,14 @@ import edu.cs3500.spreadsheets.model.formula.functions.ErrorFunction;
 public class ScrollView extends JFrame implements IView {
 
   private SlimWorksheet model;
-  protected Features features;
+  Features features;
 
-  protected int minWCell = 1;
-  protected int maxWCell = 10;
-  protected int minHCell = 1;
-  protected int maxHCell = 20;
+  int minWCell = 1;
+  int maxWCell = 10;
+  private int minHCell = 1;
+  private int maxHCell = 20;
 
-  protected Coord activeCell;
+  Coord activeCell;
 
   private JScrollPane scrollPane;
   private Point lastP = new Point(0, 0);

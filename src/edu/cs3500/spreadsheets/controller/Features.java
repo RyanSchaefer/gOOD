@@ -11,19 +11,13 @@ public interface Features {
    * Allows user to edit and change the value of a cell.
    * @param c the cell's Coordinate
    * @param s the new desired value of the cell
-   * @return The String so far
    */
   void editCell(Coord c, String s);
 
-
   /**
-   * Saves a spreadsheet.
+   * Allows the user to delete the contents of a cell by pressing the delete key.
+   * @param c the cell's Coordinate
    */
-  void saveSheet();
-
-  /**
-   * Loads a spreadsheet.
-   */
-  void loadSheet(String sheet);
+  void deleteCellContents(Coord c);
 
 }

@@ -59,7 +59,7 @@ public class TestView {
     IWorksheet model2 = model("testOut.gOOD");
 
     for (Coord c : model2.allActiveCells()) {
-      assertEquals(model.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
+      assertEquals(model2.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
     }
   }
 
@@ -90,12 +90,7 @@ public class TestView {
     IWorksheet model2 = model("testOut2.gOOD");
 
     for (Coord c : model2.allActiveCells()) {
-      assertEquals(model.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
+      assertEquals(model2.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
     }
   }
-
-  @Test
-  public void testEdit() {
-  }
-
 }

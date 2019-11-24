@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.commandLine;
+package edu.cs3500.spreadsheets.commandline;
 
 import edu.cs3500.spreadsheets.controller.SheetController;
 import edu.cs3500.spreadsheets.model.BasicSlimWorksheet;
@@ -18,7 +18,7 @@ public class BlankEditableGUICommand implements CommandParser {
     }
     if (args[0].equals("-edit")) {
       IWorksheet model = builder.createWorksheet();
-      new SheetController(model, new EditableView(new BasicSlimWorksheet(model))).go();
+      new SheetController(model, new EditableView(new BasicSlimWorksheet(model))).displayView();
       return "Running controller\nTerminating...";
     }
     return null;

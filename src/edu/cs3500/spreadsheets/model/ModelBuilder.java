@@ -23,7 +23,7 @@ public class ModelBuilder {
     ModelBuilder m;
 
     /**
-     * Start Building a ModelBuilder
+     * Start Building a ModelBuilder.
      */
     public ModelBuilderBuilder() {
       m = new ModelBuilder();

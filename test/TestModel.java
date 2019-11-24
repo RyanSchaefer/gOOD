@@ -50,8 +50,8 @@ public abstract class TestModel {
       setupFunctions();
       try {
         return WorksheetReader
-                .read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
-                        new FileReader(new File("test/" + file)));
+            .read(new BasicWorksheet.BasicWorksheetBuilder(functionsSupported),
+                new FileReader(new File("test/" + file)));
 
       } catch (IOException e) {
         e.printStackTrace();
@@ -134,9 +134,11 @@ public abstract class TestModel {
   @Test
   public void changeCellValue() {
     IWorksheet sheet = model("test1.gOOD");
-    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1,
+        1).accept(new EvalPrintVisitor()));
     sheet.changeCellAt(1, 1, "5");
-    assertEquals(String.format("%f", 5.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 5.0), sheet.evaluateCellAt(1,
+        1).accept(new EvalPrintVisitor()));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -174,33 +176,43 @@ public abstract class TestModel {
     // If the cell at the given coordinates is null:
     assertNull(null, sheet.evaluateCellAt(123, 123));
     // Evaluates cell's that are numbers
-    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
-    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1, 2).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 3.0), sheet.evaluateCellAt(1,
+        1).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 144.0), sheet.evaluateCellAt(1,
+        2).accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void evalCell2() {
     IWorksheet sheet = model("test3.gOOD");
     // Evaluates a cell that is a String
-    assertEquals("\"hello\"", sheet.evaluateCellAt(1, 1).accept(new EvalPrintVisitor()));
+    assertEquals("\"hello\"", sheet.evaluateCellAt(1,
+        1).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a boolean
-    assertEquals("true", sheet.evaluateCellAt(1, 2).accept(new EvalPrintVisitor()));
+    assertEquals("true", sheet.evaluateCellAt(1,
+        2).accept(new EvalPrintVisitor()));
   }
 
   @Test
   public void evalCellWithFormulas() {
     IWorksheet sheet = model("test3.gOOD");
     // Evaluates a cell that is a SUM function
-    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(2, 4).accept(new EvalPrintVisitor()));
-    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(2, 7).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 6.0), sheet.evaluateCellAt(2,
+        4).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 4.0), sheet.evaluateCellAt(2,
+        7).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a PRODUCT function
-    assertEquals(String.format("%f", 2.0), sheet.evaluateCellAt(2, 5).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 2.0), sheet.evaluateCellAt(2,
+        5).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a PRODUCT function with an incorrect type within it
-    assertEquals(String.format("%f", 9.0), sheet.evaluateCellAt(2, 8).accept(new EvalPrintVisitor()));
+    assertEquals(String.format("%f", 9.0), sheet.evaluateCellAt(2,
+        8).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a < function
-    assertEquals("false", sheet.evaluateCellAt(2, 6).accept(new EvalPrintVisitor()));
+    assertEquals("false", sheet.evaluateCellAt(2,
+        6).accept(new EvalPrintVisitor()));
     // Evaluates a cell that is a LOWERCASE function
-    assertEquals("\"test\"", sheet.evaluateCellAt(1, 5).accept(new EvalPrintVisitor()));
+    assertEquals("\"test\"", sheet.evaluateCellAt(1,
+        5).accept(new EvalPrintVisitor()));
   }
 
   @Test

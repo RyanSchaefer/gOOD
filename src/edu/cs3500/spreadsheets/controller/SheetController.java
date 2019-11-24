@@ -9,8 +9,8 @@ import edu.cs3500.spreadsheets.view.IView;
  */
 public class SheetController implements Controller {
 
-  IWorksheet model;
-  IView view;
+  private IWorksheet model;
+  private IView view;
 
   private class SheetControllerFeatures implements Features {
     @Override
@@ -25,13 +25,10 @@ public class SheetController implements Controller {
     }
 
     @Override
-    public void saveSheet() {
-
-    }
-
-    @Override
-    public void loadSheet(String sheet) {
-
+    public void deleteCellContents(Coord c) {
+      model.changeCellAt(c.col, c.row, null);
+      view.renderSpreadsheet();
+      view.makeVisible();
     }
 
     @Override
@@ -52,7 +49,7 @@ public class SheetController implements Controller {
   }
 
   @Override
-  public void go() {
+  public void displayView() {
     view.addFeatures(new SheetControllerFeatures());
     view.renderSpreadsheet();
     view.makeVisible();

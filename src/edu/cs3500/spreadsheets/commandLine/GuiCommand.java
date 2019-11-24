@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.commandLine;
+package edu.cs3500.spreadsheets.commandline;
 
 import java.io.FileReader;
 import java.io.IOException;

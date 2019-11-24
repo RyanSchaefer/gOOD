@@ -1,4 +1,4 @@
-package edu.cs3500.spreadsheets.commandLine;
+package edu.cs3500.spreadsheets.commandline;
 
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.WorksheetReader;
