@@ -107,6 +107,7 @@ public class BasicWorksheet implements IWorksheet {
 
     if (s == null) {
       grid.remove(coord);
+      evalMap.remove(coord);
       return;
     }
     Sexp sexp;

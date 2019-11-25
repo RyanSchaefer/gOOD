@@ -1,8 +1,12 @@
 package edu.cs3500.spreadsheets.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.view.IView;
+import edu.cs3500.spreadsheets.view.TextualView;
 
 /**
  * Handles mediation between an IView and a IWorksheet.
@@ -29,6 +33,13 @@ public class SheetController implements Controller {
       model.changeCellAt(c.col, c.row, null);
       view.renderSpreadsheet();
       view.makeVisible();
+    }
+
+    @Override
+    public void save(String filename) throws IOException {
+      PrintWriter writer = new PrintWriter(filename);
+      new TextualView(model, writer).renderSpreadsheet();
+      writer.close();
     }
 
     @Override
