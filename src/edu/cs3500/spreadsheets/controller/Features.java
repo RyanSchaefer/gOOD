@@ -1,5 +1,7 @@
 package edu.cs3500.spreadsheets.controller;
 
+import java.io.IOException;
+
 import edu.cs3500.spreadsheets.model.Coord;
 
 /**
@@ -19,5 +21,7 @@ public interface Features {
    * @param c the cell's Coordinate
    */
   void deleteCellContents(Coord c);
+
+  void save(String filename) throws IOException;
 
 }

@@ -1,7 +1,7 @@
 package edu.cs3500.spreadsheets.model.formula.value.visitors;
 
 /**
- * Formats values properly for the {@link edu.cs3500.spreadsheets.commandLine.EvalCommand}.
+ * Formats values properly for the {@link edu.cs3500.spreadsheets.commandline.EvalCommand}.
  */
 public class EvalPrintVisitor implements ValueVisitor<String> {
   @Override
