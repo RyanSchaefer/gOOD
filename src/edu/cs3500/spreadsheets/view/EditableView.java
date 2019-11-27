@@ -1,17 +1,25 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.*;
-
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.ICell;
 import edu.cs3500.spreadsheets.model.SlimWorksheet;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.JViewport;
 
 /**
  * A {@link IView} that has the facilities for editing built into it.
@@ -57,6 +65,8 @@ public class EditableView extends ScrollView {
       }
     });
 
+    // Added the ability to navigate the cells by pressing "W" "A" "S" "D"
+    // (up, left, down, right respectively).
     this.addKeyListener(new KeyAdapter() {
       @Override
       public void keyTyped(KeyEvent e) {

@@ -1,18 +1,25 @@
 package edu.cs3500.spreadsheets.view;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-import javax.swing.*;
-
 import edu.cs3500.spreadsheets.controller.Features;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
+/**
+ * Represents a view to allow the user to enter in, and accept or reject, the desired name they
+ * would like to save the file to.
+ */
 public class FileInput extends JFrame implements IView {
 
-  Features features;
-  JTextField textBox;
+  private Features features;
+  private JTextField textBox;
 
   FileInput() {
     this.setLayout(new FlowLayout());

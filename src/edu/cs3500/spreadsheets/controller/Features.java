@@ -22,6 +22,11 @@ public interface Features {
    */
   void deleteCellContents(Coord c);
 
+  /**
+   * Saves the file to whatever the user inputs as the file name.
+   * @param filename the name of the file
+   * @throws IOException if the file cannot be saved
+   */
   void save(String filename) throws IOException;
 
 }

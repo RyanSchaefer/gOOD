@@ -3,6 +3,11 @@ Changes
 - added a way to easily construct new models, ModelBuilder.
 - added a way to easily add new command line arguments, CommandParser.
 - added ability to use visitors for Values.
+- added a delete feature to delete the contents of a cell by pressing the delete key.
+- added the ability to name and save  a file.
+- added the ability to navigate the cells by pressing "W" "A" "S" "D"
+  (up, left, down, right respectively).
+
 Assignment 6:
 Changes - Added ICell type
 IView - One of several views of the model (e.g. text / gui)
