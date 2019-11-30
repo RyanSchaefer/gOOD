@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import edu.cs3500.spreadsheets.controller.provider.ControllerToProvider;
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
@@ -18,6 +19,7 @@ import edu.cs3500.spreadsheets.model.formula.functions.ProductFunc;
 import edu.cs3500.spreadsheets.model.formula.functions.SumFunc;
 import edu.cs3500.spreadsheets.view.IView;
 import edu.cs3500.spreadsheets.view.TextualView;
+import edu.cs3500.spreadsheets.view.provider.ViewControllableSpreadsheet;
 
 import static org.junit.Assert.assertEquals;
 
@@ -92,5 +94,19 @@ public class TestView {
     for (Coord c : model2.allActiveCells()) {
       assertEquals(model2.getCellAt(c.col, c.row), model2.getCellAt(c.col, c.row));
     }
+  }
+
+  @Test
+  public void testProvider() {
+    IWorksheet model = model("triangle.gOOD");
+    ViewControllableSpreadsheet t = new ViewControllableSpreadsheet(
+            null);
+
+    try {
+      new ControllerToProvider(t, model).run();
+    } catch (IOException e) {
+      System.out.println("Couldn't run model");
+    }
+    while (true) ;
   }
 }
