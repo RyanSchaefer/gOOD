@@ -4,16 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.cs3500.spreadsheets.controller.Controller;
 import edu.cs3500.spreadsheets.model.Coord;
 import edu.cs3500.spreadsheets.model.IWorksheet;
 import edu.cs3500.spreadsheets.model.provider.BasicToProviderAdapter;
 import edu.cs3500.spreadsheets.model.provider.WorksheetInterface;
 import edu.cs3500.spreadsheets.view.provider.ViewSpreadsheetInterface;
 
-public class ControllerToProvider {
+public class ControllerToProvider implements Controller {
 
   private ViewSpreadsheetInterface view;
   private WorksheetInterface model;
+
   private Features f = new Features() {
     @Override
     public void selectCell(int mouseX, int mouseY) {
@@ -134,7 +136,14 @@ public class ControllerToProvider {
     this.model = new BasicToProviderAdapter(model);
   }
 
-  public void run() throws IOException {
-    f.run();
+  @Override
+  public void displayView() {
+    try {
+      f.run();
+    } catch (IOException e) {
+      /*
+      Constructing will throw the IO exception that this claims to throw.
+       */
+    }
   }
 }

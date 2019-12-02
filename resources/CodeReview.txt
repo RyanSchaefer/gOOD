@@ -1,0 +1,45 @@
+Design Critique
+The interfaces that we were given were somewhat flexible. With regards to the view, we thought that
+it was strange that we needed to manually update the view each time there was a change to the model
+underlying it. We also thought that there were some implementation specific details that seemed
+to bubble up to the interface when they should be kept on the implementation level. Furthermore, the
+design of the program seems to be too tightly coupled to the implementation of having a
+List<List<String>>. Our design didn't have that so we had to do a costly conversion from
+Map<Coord, Cell> to the List<List<String>> any time we wanted to update the view. It would have
+been very beneficial for your View to take in your Model in its constructor.
+
+Implementation Critique
+Diving into specific implementations, we believe your scrolling was excellent. You were able to get
+a much smoother scrolling experience than we were. With regards to the controller. We believe that
+if you had a Controller interface separate from the Features interface, it would be more secure. As
+it stands anyone with access to the controller object would be able to call methods on it like,
+confirm input or the like to change cells as they pleased. We also were perplexed by the lack of
+highlighting of errors. We were unsure what we were suppose to do in this case and thus we just
+allowed the cell to be blank because that is how your view handled the fact. We also felt that
+because you chose to take in a list of list of string instead of a model, you lost the utilities
+associated with a model and also the utility of having a reference which was updated in both
+the controller and the view at the same time. Finally, we appreciated how cleanly you were able to
+implement the grid paint panel. We also believe that your model interface methods all made sense
+to be on the model.
+
+Documentation Critique
+Overall, the documentation was thorough. We had a clear path with how we were suppose to implement
+most of the methods. We believe that it would have helped if you would have mentioned specifically
+the handling of null objects we would have had a better clue how we were suppose to adapt our
+model to handel them. We also were very unsure about one method in particular, (selectCell) and why
+it had to have the rawContents of the cell passed into it when it was called.
+
+Design/Code Limitations and Suggestions
+We believe that your code has a few limitations as it stands right now. First, as we mentioned
+before, your view should really take in a model or an immutable version of the model. This would
+uncouple the assumption that every model must be capable of being turned into a list of list of
+string. We also believe that this would help you with removing the method where you have to update
+what the list of list of string that the view is using is each time that you change the model.
+If you took in a model in your view the changes made on that model would "automatically" propagate
+to your view. We also believe that it is a limitation to have to keep track of the highlighted cell
+in the controller as well as the view. This violates the single point of truth practice. Your view
+could call to the controllers features with the coordinate that is highlighted instead of no
+arguments. We also believed that there was some duplication with where the list of list of string was
+being stored and we didn't know why it was stored in the ViewSpreadSheet and GridPaintPanel.
+
+Overall good job :)!

@@ -1,0 +1,8 @@
+The biggest lesson we learned from the code that was given to us was how to make a simpler view.
+Our group struggled with programming the GUI and I think seeing a proper working implementation
+was eye opening. It also goes to show that some people are better at building specific parts of a
+program (view vs model). There wasn't really much interaction on either end. Looking back on how
+we believe the model we were given was implemented versus how we implemented our model, we believe
+that we might have put undue stress on those we provided to if they had to "upsample" from a Sexp /
+String based model to our model. We don't know if that is bad on our end, but it was just something
+to think about.

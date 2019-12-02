@@ -10,6 +10,7 @@ import edu.cs3500.spreadsheets.commandline.Commands;
 import edu.cs3500.spreadsheets.commandline.EditableGUICommand;
 import edu.cs3500.spreadsheets.commandline.EvalCommand;
 import edu.cs3500.spreadsheets.commandline.GuiCommand;
+import edu.cs3500.spreadsheets.commandline.ProviderCommand;
 import edu.cs3500.spreadsheets.commandline.SaveCommand;
 import edu.cs3500.spreadsheets.model.BasicWorksheet;
 import edu.cs3500.spreadsheets.model.ModelBuilder;
@@ -45,7 +46,8 @@ public class BeyondGood {
             .newCommand(new GuiCommand())
             .newCommand(new BlankGuiCommand())
             .newCommand(new BlankEditableGUICommand())
-            .newCommand(new EditableGUICommand()).build();
+            .newCommand(new EditableGUICommand())
+            .newCommand(new ProviderCommand()).build();
 
 
     System.out.print(cp.parse(mb.buildModel(BasicWorksheet.class), args));
